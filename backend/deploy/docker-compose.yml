@@ -7,7 +7,7 @@ services:
       dockerfile: ./deploy/Dockerfile
     restart: always
     env_file:
-    - .env
+    - ./deploy/.env
     depends_on:
       db:
         condition: service_healthy
