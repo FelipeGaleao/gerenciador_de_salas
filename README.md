@@ -34,4 +34,4 @@ Em sequência, será necessário executar as duas aplicações (backend e fronte
 ### 🐍 Backend
 
 Siga as instruções do README.md do backend para executar a aplicação Backend. <br>
-Clique [aqui](./backend/readme.md) para acessar o README.md da aplicação Backend.
+Clique [aqui](/backend/readme.md) para acessar o README.md da aplicação Backend.
