@@ -5,8 +5,8 @@ Aplicação backend para o projeto de trabalho final "Localiza Sala" da discipli
 
 ## Poetry
 
-Esse projeto utiliza o gerenciador de dependências [Poetry](https://python-poetry.org/).
-Para executar o projeto, é necessário instalar o Poetry e executar o comando `poetry install` para instalar as dependências.
+Esse projeto utiliza o gerenciador de dependências [Poetry](https://python-poetry.org/). <br>
+Para executar o projeto, é necessário instalar o Poetry e executar o comando `poetry install` para instalar as dependências. <br>
 Utilize a sequência de comandos abaixo:
 
 
@@ -15,17 +15,17 @@ poetry install
 poetry run python -m app
 ```
 
-Isso fará com que o Poetry crie um ambiente virtual e instale as dependências necessárias para o projeto.
-Em seguida, o comando `poetry run python -m app` executará o projeto.
+Isso fará com que o Poetry crie um ambiente virtual e instale as dependências necessárias para o projeto. <br>
+Em seguida, o comando `poetry run python -m app` executará o projeto. <br>
 
 Você poderá encontrar a documentação da API em `http://localhost:5000/api/docs`.
 
 
 ## Docker
 
-Você pode executar o projeto utilizando o Docker.
-Para isso, é necessário ter o Docker e o Docker Compose instalados.
-Utilize a sequência de comandos abaixo:
+Você pode executar o projeto utilizando o Docker. <br>
+Para isso, é necessário ter o Docker e o Docker Compose instalados. <br>
+Utilize a sequência de comandos abaixo: <br>
 
 ```bash
 docker-compose -f deploy/docker-compose.yml --project-directory . up --build
@@ -38,8 +38,8 @@ Caso você queira executar o projeto em modo de desenvolvimento, utilize o coman
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml --project-directory . up
 ```
 
-Esse comando irá executar o projeto em modo de desenvolvimento, ou seja, com o hot reload ativado.
-Isso significa que, toda vez que você alterar um arquivo, o projeto será reiniciado automaticamente.
+Esse comando irá executar o projeto em modo de desenvolvimento, ou seja, com o hot reload ativado. <br>
+Isso significa que, toda vez que você alterar um arquivo, o projeto será reiniciado automaticamente. <br>
 
 Lembre-se de toda vez que você precisar instalar uma nova dependência, você deve executar o comando `docker-compose -f deploy/docker-compose.yml --project-directory . up --build` para que a dependência seja instalada no container.
 
@@ -67,14 +67,14 @@ app
 
 ## Configuração
 
-Essa aplicação deve ser configurada utilizando variáveis de ambiente.
-As variáveis de ambiente são definidas no arquivo `.env` na raiz do projeto.
-Você pode utilizar o arquivo `.env.example` como base para criar o arquivo `.env`.
+Essa aplicação deve ser configurada utilizando variáveis de ambiente. <br> 
+As variáveis de ambiente são definidas no arquivo `.env` na raiz do projeto. <br>
+Você pode utilizar o arquivo `.env.example` como base para criar o arquivo `.env`. <br>
 
-Todas as variáveis de ambiente devem iniciadas com o prefixo "LOCALIZA_SALA_BACKEND_".
+Todas as variáveis de ambiente devem iniciadas com o prefixo "LOCALIZA_SALA_BACKEND_". <br>
 
-Por exemplo, a variável de ambiente `LOCALIZA_SALA_BACKEND_DATABASE_URL` é utilizada para definir a URL de conexão com o banco de dados.
-
+Por exemplo, a variável de ambiente `LOCALIZA_SALA_BACKEND_DATABASE_URL` é utilizada para definir a URL de conexão com o banco de dados. <br>
+ 
 
 Exemplo de arquivo `.env`:
 
@@ -87,17 +87,17 @@ LOCALIZA_SALA_BACKEND_ENVIRONMENT="dev"
 s/
 
 ## Pre-commit
-O Pre-commit é uma ferramenta que executa scripts antes de cada commit. 
-Essa ferramenta é utilizada para executar testes e formatação de código antes de cada commit.
-Para instalar o pre-commit, execute o comando abaixo:
+O Pre-commit é uma ferramenta que executa scripts antes de cada commit.  <br> 
+Essa ferramenta é utilizada para executar testes e formatação de código antes de cada commit. <br>
+Para instalar o pre-commit, execute o comando abaixo: <br>
 
 
 ```bash
 pre-commit install
 ```
 
-O pre-commit é configurado no arquivo `.pre-commit-config.yaml` na raiz do projeto.
-Por padrão, o pre-commit executa os seguintes scripts:
+O pre-commit é configurado no arquivo `.pre-commit-config.yaml` na raiz do projeto. <br>
+Por padrão, o pre-commit executa os seguintes scripts: <br>
 
 * black (formatação de código)
 * mypy (verificação de tipos)
@@ -110,7 +110,7 @@ Você pode ler mais sobre em: https://pre-commit.com/
 
 ## Migrações
 
-Se você quer executar uma migração de banco de dados, execute o comando abaixo:
+Se você quer executar uma migração de banco de dados, execute o comando abaixo: <br>
 
 ```bash
 # Para executar uma migração específica (ex. migração 0001)
@@ -123,7 +123,7 @@ alembic upgrade "head"
 
 ### Reverter migrações
 
-Se você deseja reverter uma migração, basta executar o comando abaixo:
+Se você deseja reverter uma migração, basta executar o comando abaixo:  <br>
 
 ```bash
 # Reverter todas as migrações para a: revision_id.
@@ -152,12 +152,12 @@ Se você deseja executar os testes dentro de um container, execute o comando aba
 
 
 ```bash
-docker-compose -f deploy/docker-compose.yml --project-directory . run --rm api pytest -vv .
+docker-compose -f deploy/docker-compose.yml --project-directory . run --rm api pytest -vv . 
 docker-compose -f deploy/docker-compose.yml --project-directory . down
 ```
 
-Para executar os testes sem utilizar um container, execute o comando abaixo:
-Antes, crie um banco de dados chamado "localiza_sala_backend_test" no seu banco de dados local.
+Para executar os testes sem utilizar um container, execute o comando abaixo: <br> 
+Antes, crie um banco de dados chamado "localiza_sala_backend_test" no seu banco de dados local. <br>
 
 ```
 docker run -p "3306:3306" -e "MYSQL_PASSWORD=localiza_sala_backend" -e "MYSQL_USER=localiza_sala_backend" -e "MYSQL_DATABASE=localiza_sala_backend" -e ALLOW_EMPTY_PASSWORD=yes bitnami/mysql:8.0.30
