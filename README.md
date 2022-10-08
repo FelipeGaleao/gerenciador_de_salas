@@ -1,4 +1,4 @@
-# 🗺 localiza_sala 
+# 🗺 gerenciador_de_sala 
 
 Esse é o repositório do projeto gerenciador_de_salas, que é um projeto de gerenciamento de salas de uma universidade. 
 O projeto foi desenvolvido para ser o trabalho final da disciplina de Programação para Web do curso de Engenharia de Software da Universidade Federal do Mato Grosso do Sul.
@@ -15,7 +15,10 @@ Para o desenvolvimento da aplicação, foram utilizadas as seguintes tecnologias
   
 
 ## 🎨 Frontend
- - TBD
+Para o desenvolvimento do frontend, foi utilizado o framework ReactJS/NextJS, com as seguintes tecnologias:
+- [ReactJS](https://reactjs.org/)
+- [NextJS](https://nextjs.org/) 
+- [Material UI](https://mui.com/pt/)
 
 
 
@@ -35,3 +38,12 @@ Em sequência, será necessário executar as duas aplicações (backend e fronte
 
 Siga as instruções do README.md do backend para executar a aplicação Backend. <br>
 Clique [aqui](backend/README.md) para acessar o README.md da aplicação Backend.
+
+
+### 🚀 Aplicação Frontend e Backend
+Basta executar o comando na raiz do projeto para executar a aplicação:
+
+```bash
+docker-compose up -f ./deploy/docker-compose.yml
+```
+
