@@ -15,7 +15,7 @@ class UsersModelDTO(BaseModel):
         orm_mode = True
 
 
-class DummyModelInputDTO(BaseModel):
+class UsersModelInputDTO(BaseModel):
     """DTO para criar um novo usuário."""
 
     nome: str
