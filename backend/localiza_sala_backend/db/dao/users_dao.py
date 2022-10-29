@@ -52,10 +52,8 @@ class UsersDAO:
         check_user = await self.session.execute(
             select(UsersModel).where(UsersModel.id == user.id),
         )
-        
-        check_user = check_user.scalars().first()
 
-        print(check_user)
+        check_user = check_user.scalars().first()
         
         if not check_user:
             raise Exception("Usuário não foi encontrado.")
