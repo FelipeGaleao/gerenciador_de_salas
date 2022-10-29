@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -15,7 +15,7 @@ class UsersDAO:
     def __init__(self, session: AsyncSession = Depends(get_db_session)):
         self.session = session
 
-    async def create_user(self, nome: str, sobrenome: str, senha: str, email: str, lotacao: str, tipo_usuario: int, dt_criacao: str, dt_atualizacao: datetime, criado_por: int, atualizado_por: int, token_senha: str) -> None:
+    async def create_user(self, id: int, nome: str, sobrenome: str, senha: str, email: str, lotacao: str, tipo_usuario: int, dt_criacao: str, dt_atualizacao: datetime, criado_por: int, atualizado_por: int, token_senha: str) -> None:
         """
         Adicionar um novo usuário ao banco de dados.
 
@@ -70,7 +70,7 @@ class UsersDAO:
             raise e
     
 
-    async def get_user_by_email(self, email: str) -> Optional[UsersModel]:
+    async def get_user_by_email(self, email: str) -> Optional[Union[UsersModel, None]]:
         """
         Get user by email.
 
@@ -80,5 +80,7 @@ class UsersDAO:
         raw_user = await self.session.execute(
             select(UsersModel).where(UsersModel.email == email),
         )
-
-        return raw_user.scalars().first()
+        try: 
+            return raw_user.scalars().one()
+        except:
+            return None

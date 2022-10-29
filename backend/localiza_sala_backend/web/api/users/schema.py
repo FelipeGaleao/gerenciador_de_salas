@@ -24,6 +24,13 @@ class UsersModelDTO(BaseModel):
     class Config:
         orm_mode = True
 
+class UsersModelLoginInput(BaseModel):
+    """
+    DTO para realizar Login 
+    """
+
+    email: str
+    senha: str
 
 class UsersModelInputDTO(BaseModel):
     """DTO para criar um novo usuário."""
