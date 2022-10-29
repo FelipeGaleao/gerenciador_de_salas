@@ -17,7 +17,7 @@ services:
       dockerfile: ./deploy/Dockerfile
     restart: always
     volumes:
-    - ../backend/localiza_sala_backend:/app/src/localiza_sala_backend/
+    - ../backend/:/app/src/
     links: 
       - db
     env_file:
@@ -32,6 +32,8 @@ services:
       LOCALIZA_SALA_BACKEND_DB_USER: root
       LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
+      LOCALIZA_SALA_BACKEND_RELOAD: "True"
+
     ports:
       - "8000:8000"
     expose:
