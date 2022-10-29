@@ -1,12 +1,12 @@
 from typing import List
-
+from datetime import datetime
 from fastapi import APIRouter
 from fastapi.param_functions import Depends
-
+from fastapi.responses import JSONResponse
 from localiza_sala_backend.db.dao.users_dao import UsersDAO
 from localiza_sala_backend.db.models.users_model import UsersModel
 from localiza_sala_backend.web.api.users.schema import UsersModelDTO, UsersModelInputDTO
-
+from localiza_sala_backend.services import hash as hash_service
 router = APIRouter()
 
 
@@ -27,17 +27,34 @@ router = APIRouter()
 #     return await dummy_dao.get_all_dummies(limit=limit, offset=offset)
 
 
-@router.post("/")
+@router.post("/", response_model=UsersModelDTO, status_code=200)
+
 async def create_users_model(
     new_user_object: UsersModelInputDTO,
     user_dao: UsersDAO = Depends(),
-) -> None:
+) -> UsersModel:
     """Método para criar um novo usuário no banco de dados.
 
-    Args:
+    Args: 
         new_user_object (UsersModelInputDTO): Entidade de usuário.
-        user_dao (UsersDAO, optional): _description_. Método do DAO para criar um novo usuário. 
+        user_dao (UsersDAO, optional): Método do DAO para criar um novo usuário. 
     """
-    print(new_user_object)
+
+    new_user_object.senha = hash_service.get_hashed_password(new_user_object.senha)
+    new_user_object.dt_criacao = datetime.now()
+    new_user_object.dt_atualizacao = datetime.now()
+    new_user_object.criado_por = 0
+    new_user_object.atualizado_por = 0
+
+    userExist = await user_dao.get_user_by_email(new_user_object.email)
     
-    await user_dao.create_user(**new_user_object.dict())
+    if userExist:
+      return JSONResponse(status_code=400, content={"message": "Usuário já cadastrado."})
+    
+    try:
+        await user_dao.create_user(**new_user_object.dict())
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=400, content={"message": "Erro ao cadastrar usuário."})
+    
+    return JSONResponse(status_code=200, content={"message": "Usuário cadastrado com sucesso."})

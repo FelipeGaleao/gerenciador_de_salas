@@ -8,19 +8,26 @@ from localiza_sala_backend.db.dependencies import get_db_session
 from localiza_sala_backend.db.models.dummy_model import DummyModel
 from localiza_sala_backend.db.models.users_model import UsersModel
 
+from datetime import datetime
 class UsersDAO:
     """Class para acessar usuários no banco de dados."""
 
     def __init__(self, session: AsyncSession = Depends(get_db_session)):
         self.session = session
 
-    async def create_user(self, nome: str, sobrenome: str, senha: str, email: str, lotacao: str, tipo_usuario: int, dt_criacao: str, dt_modificacao: str, criado_por: int, atualizado_por: int, token_senha: str) -> None:
+    async def create_user(self, nome: str, sobrenome: str, senha: str, email: str, lotacao: str, tipo_usuario: int, dt_criacao: str, dt_atualizacao: datetime, criado_por: int, atualizado_por: int, token_senha: str) -> None:
         """
         Adicionar um novo usuário ao banco de dados.
 
         :param name: name of a dummy.
         """
-        self.session.add(UsersModel(nome=nome, sobrenome=sobrenome, senha=senha, email=email, lotacao=lotacao, tipo_usuario=tipo_usuario, dt_criacao=dt_criacao, dt_atualizacao=dt_modificacao, criado_por=criado_por, atualizado_por=atualizado_por, token_senha=token_senha))
+        try:
+            self.session.add(UsersModel(nome=nome, sobrenome=sobrenome, senha=senha, email=email, lotacao=lotacao, tipo_usuario=tipo_usuario, dt_criacao=dt_criacao, dt_atualizacao=dt_atualizacao, criado_por=criado_por, atualizado_por=atualizado_por, token_senha=token_senha))
+            await self.session.commit()
+        except Exception as e:
+            print(e)
+            await self.session.rollback()
+            raise e
 
     async def get_all_dummies(self, limit: int, offset: int) -> List[DummyModel]:
         """
@@ -35,3 +42,16 @@ class UsersDAO:
         )
 
         return raw_dummies.scalars().fetchall()
+
+    async def get_user_by_email(self, email: str) -> Optional[UsersModel]:
+        """
+        Get user by email.
+
+        :param email: email of user.
+        :return: user.
+        """
+        raw_user = await self.session.execute(
+            select(UsersModel).where(UsersModel.email == email),
+        )
+
+        return raw_user.scalars().first()

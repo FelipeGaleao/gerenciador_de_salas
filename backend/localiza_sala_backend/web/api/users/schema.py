@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from datetime import datetime, time, timedelta
 
 class UsersModelDTO(BaseModel):
     """
@@ -24,11 +24,15 @@ class UsersModelInputDTO(BaseModel):
     email: str
     lotacao: str
     tipo_usuario: int
-    dt_criacao: str
-    dt_modificacao: str
+    dt_criacao: datetime = datetime.now()
+    dt_atualizacao: datetime = datetime.now()
     criado_por: int
     atualizado_por: int
     token_senha: str
 
+class UserHasRegistered(BaseModel):
+    """DTO para verificar se usuário já está cadastrado."""
 
+    email: str
+    detail: dict
 
