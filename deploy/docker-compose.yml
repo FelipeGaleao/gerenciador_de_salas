@@ -16,6 +16,8 @@ services:
       context: ../backend
       dockerfile: ./deploy/Dockerfile
     restart: always
+    volumes:
+    - ../backend/localiza_sala_backend:/app/src/localiza_sala_backend/
     links: 
       - db
     env_file:
@@ -27,7 +29,7 @@ services:
       LOCALIZA_SALA_BACKEND_HOST: 0.0.0.0
       LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306
-      LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
+      LOCALIZA_SALA_BACKEND_DB_USER: root
       LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
     ports:
@@ -63,7 +65,7 @@ services:
     environment:
       LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306
-      LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
+      LOCALIZA_SALA_BACKEND_DB_USER: root
       LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
     depends_on:

@@ -13,7 +13,7 @@ services:
         condition: service_healthy
     environment:
       LOCALIZA_SALA_BACKEND_HOST: 0.0.0.0
-      LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
+      LOCALIZA_SALA_BACKEND_DB_HOST: localhost
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306
       LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
@@ -38,7 +38,10 @@ services:
       retries: 40
     volumes:
     - localiza_sala_backend-db-data:/bitnami/mysql/data
-
+    ports:
+    - 3306:3306
+    expose:
+    - 3306
   migrator:
     build:
       context: .
@@ -46,7 +49,7 @@ services:
     restart: "no"
     command: alembic upgrade head
     environment:
-      LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
+      LOCALIZA_SALA_BACKEND_DB_HOST: localhost
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306
       LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
