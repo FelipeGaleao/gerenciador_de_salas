@@ -26,6 +26,28 @@ router = APIRouter()
 #     """
 #     return await dummy_dao.get_all_dummies(limit=limit, offset=offset)
 
+@router.put('/', status_code=200)
+async def update_user(user: UsersModelInputDTO, users_dao: UsersDAO = Depends()):
+    """
+    Update user.
+
+    :param user: user to update.
+    :param users_dao: DAO for users.
+    :return: updated user.
+    """
+    user.dt_atualizacao = datetime.now()
+    user.atualizado_por = 1
+    user.senha = hash_service.get_hashed_password(user.senha)
+    
+    print(user.id)
+
+    try:
+        await users_dao.update_user(user)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"message": "Erro ao atualizar usuário!", "error_detail": str(e)})
+   
+    return JSONResponse(status_code=200, content={"message": "Usuário atualizado com sucesso!"})
+
 @router.get('/', response_model=List[UsersModelDTO])
 async def get_users(
     limit: int = 25,

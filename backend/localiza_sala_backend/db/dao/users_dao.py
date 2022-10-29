@@ -43,6 +43,35 @@ class UsersDAO:
 
         return raw_users.scalars().fetchall()
 
+    async def update_user(self, user: UsersModel) -> None:
+        """
+        Update user by id.
+
+        :param id: id of user.
+        """
+        check_user = await self.session.execute(
+            select(UsersModel).where(UsersModel.id == user.id),
+        )
+        
+        check_user = check_user.scalars().first()
+
+        print(check_user)
+        
+        if not check_user:
+            raise Exception("Usuário não foi encontrado.")
+
+        user_data = user.dict(exclude_unset=True)
+        for key, value in user_data.items():
+            setattr(check_user, key, value)
+        try:
+            await self.session.commit()
+            return user_data
+        except Exception as e:
+            print(e)
+            await self.session.rollback()
+            raise e
+    
+
     async def get_user_by_email(self, email: str) -> Optional[UsersModel]:
         """
         Get user by email.

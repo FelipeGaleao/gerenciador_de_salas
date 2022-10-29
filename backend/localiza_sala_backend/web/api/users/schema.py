@@ -38,6 +38,7 @@ class UsersModelInputDTO(BaseModel):
         title="Sobrenome do usuário",
         description="Sobrenome do usuário",
     )
+    id: Union[int, None]
     senha: str
     email: str
     lotacao: str
