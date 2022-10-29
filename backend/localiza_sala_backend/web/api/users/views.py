@@ -26,9 +26,16 @@ router = APIRouter()
 #     """
 #     return await dummy_dao.get_all_dummies(limit=limit, offset=offset)
 
+@router.get('/', response_model=List[UsersModelDTO])
+async def get_users(
+    limit: int = 25,
+    offset: int = 0,
+    users_dao: UsersDAO = Depends()
+) -> List[UsersModel]:
+    return await users_dao.get_all_users(limit=limit, offset=offset)
+
 
 @router.post("/", response_model=UsersModelDTO, status_code=200)
-
 async def create_users_model(
     new_user_object: UsersModelInputDTO,
     user_dao: UsersDAO = Depends(),
@@ -43,6 +50,7 @@ async def create_users_model(
     new_user_object.senha = hash_service.get_hashed_password(new_user_object.senha)
     new_user_object.dt_criacao = datetime.now()
     new_user_object.dt_atualizacao = datetime.now()
+    new_user_object.tipo_usuario = 0
     new_user_object.criado_por = 0
     new_user_object.atualizado_por = 0
 

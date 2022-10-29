@@ -29,7 +29,7 @@ class UsersDAO:
             await self.session.rollback()
             raise e
 
-    async def get_all_dummies(self, limit: int, offset: int) -> List[DummyModel]:
+    async def get_all_users(self, limit: int, offset: int) -> List[UsersModel]:
         """
         Get all dummy models with limit/offset pagination.
 
@@ -37,11 +37,11 @@ class UsersDAO:
         :param offset: offset of dummies.
         :return: stream of dummies.
         """
-        raw_dummies = await self.session.execute(
-            select(DummyModel).limit(limit).offset(offset),
+        raw_users = await self.session.execute(
+            select(UsersModel).limit(limit).offset(offset),
         )
 
-        return raw_dummies.scalars().fetchall()
+        return raw_users.scalars().fetchall()
 
     async def get_user_by_email(self, email: str) -> Optional[UsersModel]:
         """
