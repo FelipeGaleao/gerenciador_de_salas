@@ -14,7 +14,7 @@ class RoomsDAO:
     def __init__(self, session: AsyncSession = Depends(get_db_session)):
         self.session = session
 
-    async def create_room(self, nome_sala: str, lotacao: int, observacao: str, agendavel: bool, dt_criacao: datetime, dt_atualizacao: datetime, criado_por: int, atualizado_por: int) -> None:
+    async def create_room(self, nome_sala: str, lotacao: int, observacao: str, agendavel: bool, dt_criacao: datetime, dt_atualizacao: datetime, criado_por: int) -> None:
         """
         Adiciona uma sala no banco de dados.
 
@@ -28,7 +28,7 @@ class RoomsDAO:
         :param atualizado_por: usuário que atualizou a sala.
         """
         try:
-            self.session.add(RoomsModel(nome_sala=nome_sala, lotacao=lotacao, observacao=observacao, agendavel=agendavel, dt_criacao=dt_criacao, dt_atualizacao=dt_atualizacao, criado_por=criado_por, atualizado_por=atualizado_por))
+            self.session.add(RoomsModel(nome_sala=nome_sala, lotacao=lotacao, observacao=observacao, agendavel=agendavel, dt_criacao=dt_criacao, dt_atualizacao=dt_atualizacao, criado_por=criado_por))
             await self.session.commit()
         except Exception as e:
             print(e)

@@ -6,7 +6,10 @@ from fastapi import APIRouter, status
 from fastapi.param_functions import Depends
 from fastapi.responses import JSONResponse
 from localiza_sala_backend.db.dao.rooms_dao import RoomsDAO
-from localiza_sala_backend.web.api.rooms.schema import RoomModelsDTO
+from localiza_sala_backend.db.dao.users_dao import UsersDAO
+from localiza_sala_backend.web.api.rooms.schema import RoomModelsDTO, RoomModelView
+from localiza_sala_backend.db.models.users_model import UsersModel
+from localiza_sala_backend.web.api.users.schema import UsersModelDTO, UsersModelInputDTO, TokenPayload
 from localiza_sala_backend.services import hash as hash_service
 from localiza_sala_backend.services.auth import reuseable_oauth
 from fastapi.security import OAuth2PasswordRequestForm
@@ -105,20 +108,22 @@ router = APIRouter()
 #      "refresh_token": refresh_token,
 #      "user_detail": UsersModelDTO.from_orm(check_user).json()})
 
-@router.get('/', response_model=List[RoomModelsDTO])
+@router.get('/', response_model=List[RoomModelView])
 async def get_users(
     limit: int = 25,
     offset: int = 0,
     rooms_dao: RoomsDAO = Depends(),
-    room: RoomModelsDTO = Depends(reuseable_oauth)
-) -> List[RoomModelsDTO]:
+    room: RoomModelView = Depends(reuseable_oauth)
+) -> List[RoomModelView]:
     return await rooms_dao.get_all_rooms(limit=limit, offset=offset)
 
 
 @router.post("/", status_code=200)
 async def create_new_room(
     new_room: RoomModelsDTO,
+    users_dao: UsersDAO = Depends(),
     room_dao: RoomsDAO = Depends(),
+    token: str = Depends(reuseable_oauth)
 ) -> RoomModelsDTO:
     """Método para criar uma nova sala.
 
@@ -126,6 +131,28 @@ async def create_new_room(
         new_room (UsersModelInputDTO): Entidade da sala a ser criada.
         room_dao (RoomsDAO, optional): Método do DAO para criar uma nova sala.
     """
+
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+       
+        token_data = TokenPayload(**payload)
+    
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        user = await users_dao.get_user_by_email(token_data.sub)
+        user_detail = UsersModelDTO.from_orm(user)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Usuário não encontrado"})
+
+    new_room.dt_criacao = datetime.now()
+    new_room.dt_atualizacao = datetime.now()
+    new_room.criado_por = user_detail.id
     
     try:
         await room_dao.create_room(**new_room.dict())
