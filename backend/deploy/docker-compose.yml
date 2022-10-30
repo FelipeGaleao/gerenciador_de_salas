@@ -13,11 +13,17 @@ services:
         condition: service_healthy
     environment:
       LOCALIZA_SALA_BACKEND_HOST: 0.0.0.0
-      LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
+      LOCALIZA_SALA_BACKEND_DB_HOST: localhost
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306
       LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
+      LOCALIZA_SALA_JWT_SECRET_KEY: bolsonaro22lula13
+      LOCALIZA_SALA_JWT_REFRESH_SECRET_KEY: bolsonaro22lula13tebet
+      LOCALIZA_SALA_JWT_ALGORITHM: HS256
+      LOCALIZA_SALA_JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      LOCALIZA_SALA_JWT_REFRESH_TOKEN_EXPIRE_MINUTES: 43200 # 7 dias
+      
     ports:
       - "8000:8000"
     expose:
@@ -38,7 +44,10 @@ services:
       retries: 40
     volumes:
     - localiza_sala_backend-db-data:/bitnami/mysql/data
-
+    ports:
+    - 3306:3306
+    expose:
+    - 3306
   migrator:
     build:
       context: .
@@ -46,7 +55,7 @@ services:
     restart: "no"
     command: alembic upgrade head
     environment:
-      LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
+      LOCALIZA_SALA_BACKEND_DB_HOST: localhost
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306
       LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
       LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend

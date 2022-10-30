@@ -11,59 +11,72 @@ services:
         - ../frontend/:/app/
       ports:
         - "3000:3000"
-  # api:
-  #   build:
-  #     context: ../backend
-  #     dockerfile: ./deploy/Dockerfile
-  #   restart: always
-  #   env_file:
-  #   - .env
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #   environment:
-  #     LOCALIZA_SALA_BACKEND_HOST: 0.0.0.0
-  #     LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
-  #     LOCALIZA_SALA_BACKEND_DB_PORT: 3306
-  #     LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
-  #     LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
-  #     LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
-  #   ports:
-  #     - "8000:8000"
-  #   expose:
-  #     - "8000"
-  # db:
-  #   image: mysql
-  #   hostname: localiza_sala_backend-db
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_USER: "localiza_sala_backend"
-  #     MYSQL_ROOT_PASSWORD: "localiza_sala_backend"
-  #     MYSQL_DATABASE: "localiza_sala_backend"
-  #     MYSQL_AUTHENTICATION_PLUGIN: "mysql_native_password"
-  #   healthcheck:
-  #     test: mysqladmin ping -h localhost
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 40
-  #   volumes:
-  #   - localiza_sala_backend-db-data:/bitnami/mysql/data
-
-  # migrator:
-  #   build:
-  #     context: ../backend
-  #     dockerfile: ./deploy/Dockerfile
-  #   restart: "no"
-  #   command: alembic upgrade head
-  #   environment:
-  #     LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
-  #     LOCALIZA_SALA_BACKEND_DB_PORT: 3306
-  #     LOCALIZA_SALA_BACKEND_DB_USER: localiza_sala_backend
-  #     LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
-  #     LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  api:
+    build:
+      context: ../backend
+      dockerfile: ./deploy/Dockerfile
+    restart: always
+    volumes:
+    - ../backend/:/app/src/
+    links: 
+      - db
+    env_file:
+    - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      LOCALIZA_SALA_BACKEND_HOST: 0.0.0.0
+      LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
+      LOCALIZA_SALA_BACKEND_DB_PORT: 3306
+      LOCALIZA_SALA_BACKEND_DB_USER: root
+      LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
+      LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
+      LOCALIZA_SALA_BACKEND_RELOAD: "True"
+      JWT_SECRET_KEY: bolsonaro22lula13
+      JWT_REFRESH_SECRET_KEY: bolsonaro22lula13tebet
+      JWT_ALGORITHM: HS256
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      JWT_REFRESH_TOKEN_EXPIRE_MINUTES: 43200 # 7 dias
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+  db:
+    image: mysql
+    hostname: localiza_sala_backend-db
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: "localiza_sala_backend"
+      MYSQL_ROOT_PASSWORD: "localiza_sala_backend"
+      MYSQL_DATABASE: "localiza_sala_backend"
+      MYSQL_AUTHENTICATION_PLUGIN: "mysql_native_password"
+    healthcheck:
+      test: mysqladmin ping -h localhost
+      interval: 10s
+      timeout: 5s
+      retries: 40
+    volumes:
+    - localiza_sala_backend-db-data:/bitnami/mysql/data
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+  migrator:
+    build:
+      context: ../backend
+      dockerfile: ./deploy/Dockerfile
+    restart: "no"
+    command: alembic upgrade head
+    environment:
+      LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
+      LOCALIZA_SALA_BACKEND_DB_PORT: 3306
+      LOCALIZA_SALA_BACKEND_DB_USER: root
+      LOCALIZA_SALA_BACKEND_DB_PASS: localiza_sala_backend
+      LOCALIZA_SALA_BACKEND_DB_BASE: localiza_sala_backend
+    depends_on:
+      db:
+        condition: service_healthy
 
 
 
