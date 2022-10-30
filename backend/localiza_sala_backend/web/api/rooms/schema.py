@@ -1,0 +1,23 @@
+from pydantic import BaseModel, Field
+from datetime import datetime, time, timedelta
+from typing import Union
+
+class RoomModelsDTO(BaseModel):
+    """
+    DTO for Room Model
+
+    Valores retornados ao acessar usuários.
+    """
+
+    nome_sala: str = Field(..., example="Sala 1")
+    lotacao: int = Field(..., example=10)
+    observacao: str = Field(..., example="Sala com ar condicionado")
+    agendavel: bool = Field(..., example=True)
+    dt_criacao: datetime = Field(..., example="2022-10-30 20:51:50.862505")
+    dt_atualizacao: datetime = Field(..., example="2022-10-30 20:51:50.862505")
+    criado_por: int = Field(..., example=1)
+    atualizado_por: int = Field(..., example=1)
+
+
+    class Config:
+        orm_mode = True
