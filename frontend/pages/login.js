@@ -102,11 +102,11 @@ const handleSubmit = async (values) => {
   
   return (
     <Grid style={{justifyContent: "center"}}>
-      <Grid.Col md={4} sm={12}>
+      <Grid.Col md={6} sm={12}>
       <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
       
       <Title order={1} style={{color: "#495057" }}>Login</Title>
-      <Text size="lg">Preencha os campos para autenticar-se</Text>
+      <Text size="md">Preencha os campos para autenticar-se</Text>
       <hr style={{color: "#495057", marginBottom: "30px", opacity: "0.2"}} />
       <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
 
