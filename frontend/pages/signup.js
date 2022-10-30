@@ -99,7 +99,7 @@ export default function SignupPage() {
 
   return (
     <Grid style={{justifyContent: "center"}}>
-    <Grid.Col md={4} sm={12}>
+    <Grid.Col md={8} sm={12}>
       <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
         <Title order={1} style={{color: "#495057" }}>Cadastro</Title>
         <Text size="lg">Preencha os campos abaixo para criar sua conta</Text>
