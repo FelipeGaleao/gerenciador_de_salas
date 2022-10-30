@@ -26,6 +26,7 @@ import {
 } from '@tabler/icons';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 
 
@@ -151,7 +152,7 @@ const handleLogout = () => {
     <div className={classes.header}>
       <Container className={classes.mainSection}>
         <Group position="apart">
-          <img src="https://www.ufms.br/wp-content/uploads/2017/07/ufms-.png" height="30px"></img>
+          <Image src="/ufms_logo_positivo_assinatura_horizontal_pb_rgb_fundo_vazado.png" width="300px" height="104.62px"/>
           <Burger
             opened={opened}
             onClick={toggle}
