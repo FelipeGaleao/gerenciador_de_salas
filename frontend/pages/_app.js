@@ -1,14 +1,15 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
-import { AppShell, Navbar, Header } from '@mantine/core';
-import { HeaderSimple } from '../components/navbar';
+import { AppShell, Header } from '@mantine/core';
+import { Navbar } from '../components/navbar';
 import { NotificationsProvider } from '@mantine/notifications';
-import { storeWrapper } from "../store";
 import { store, wrapper } from "../store/";
 import { Provider } from "react-redux";
+import { PersistGate } from 'redux-persist/integration/react'
 
-function App({ Component, pageProps }) {
+function App({ Component, pageProps, ...rest }) {
+  const { store, props } = wrapper.useWrappedStore(rest);
 
   return (
     <>
@@ -20,7 +21,8 @@ function App({ Component, pageProps }) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-
+      <Provider store={store}>
+      <PersistGate loading={null} persistor={store.__PERSISTOR}>
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
@@ -30,11 +32,10 @@ function App({ Component, pageProps }) {
         }}
       >
       <NotificationsProvider>
-      <Provider store={store}>
 
       <AppShell
       padding="md"
-      header={<Header height={60} p="xs"> <HeaderSimple/></Header>}
+      header={<Navbar/>}
       styles={(theme) => ({
         main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
       })}>
@@ -42,12 +43,13 @@ function App({ Component, pageProps }) {
       <Component {...pageProps} />
  
       </AppShell>
-      </Provider>
       </NotificationsProvider>
 
       </MantineProvider>
+      </PersistGate>
+      </Provider>
     </>
   );
 }
 
-export default wrapper.withRedux(App);
+export default App;

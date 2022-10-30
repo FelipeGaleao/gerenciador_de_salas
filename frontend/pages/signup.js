@@ -51,7 +51,7 @@ export default function SignupPage() {
       if(response.status == 200){
         showNotification({
           title: 'Usuário criado com sucesso!',
-          message: 'Agora você pode fazer login',
+          message: 'Agora você pode fazer login.' + data.message,
           color: 'teal',
           position: 'br',
         });
@@ -62,7 +62,7 @@ export default function SignupPage() {
       else{
         showNotification({
           title: 'Erro ao criar usuário',
-          message: data.detail,
+          message: data.message,
           color: 'red',
           position: 'br',
         });
@@ -77,70 +77,75 @@ export default function SignupPage() {
   };
 
   return (
-    <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
-      <Title order={1} style={{color: "#495057" }}>Cadastro</Title>
-      <Text size="lg">Preencha os campos abaixo para criar sua conta</Text>
-      <hr style={{color: "#495057", marginBottom: "30px", opacity: "0.2"}} />
-      <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+    <Grid style={{justifyContent: "center"}}>
+    <Grid.Col md={4} sm={12}>
+      <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
+        <Title order={1} style={{color: "#495057" }}>Cadastro</Title>
+        <Text size="lg">Preencha os campos abaixo para criar sua conta</Text>
+        <hr style={{color: "#495057", marginBottom: "30px", opacity: "0.2"}} />
+        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
 
-        <Grid>
-        <LoadingOverlay visible={visible} overlayBlur={1.5} />
+          <Grid>
+          <LoadingOverlay visible={visible} overlayBlur={1.5} />
 
-          <Grid.Col md={12} sm={12}> <TextInput
-            withAsterisk
-            label="Email"
-            placeholder="ex.: maycon.mota@ufms.br"
-            {...form.getInputProps('email')}
-          />
-          </Grid.Col>
-          <Grid.Col md={4} sm={12}>
-            <TextInput
+            <Grid.Col md={12} sm={12}> <TextInput
               withAsterisk
-              label="Nome"
-              placeholder="ex.: Maycon"
-              {...form.getInputProps('nome')}
+              label="Email"
+              placeholder="ex.: maycon.mota@ufms.br"
+              {...form.getInputProps('email')}
             />
-          </Grid.Col>
-          <Grid.Col md={4} sm={12}>
-            <TextInput
-              withAsterisk
-              label="Sobrenome"
-              placeholder="ex.: Mota"
-              {...form.getInputProps('sobrenome')}
-            />
-          </Grid.Col>
-          <Grid.Col md={4} sm={12}>
-            <TextInput
-              withAsterisk
-              label="Lotação"
-              placeholder="ex.: FACOM/UFMS"
-              {...form.getInputProps('lotacao')}
-            />
-          </Grid.Col>
-          <Grid.Col md={6} sm={12}>
-            <TextInput
-              withAsterisk
-              label="Senha"
-              placeholder="ex.: 123456"
-              type={"password"}
-              {...form.getInputProps('senha_1')}
-            />
-          </Grid.Col>
-          <Grid.Col md={6} sm={12}>
-            <TextInput
-              withAsterisk
-              label="Confirme sua senha"
-              placeholder="ex.: 123456"
-              type={"password"}
-              {...form.getInputProps('senha_2')}
-            />
-          </Grid.Col>
-        </Grid>
+            </Grid.Col>
+            <Grid.Col md={4} sm={12}>
+              <TextInput
+                withAsterisk
+                label="Nome"
+                placeholder="ex.: Maycon"
+                {...form.getInputProps('nome')}
+              />
+            </Grid.Col>
+            <Grid.Col md={4} sm={12}>
+              <TextInput
+                withAsterisk
+                label="Sobrenome"
+                placeholder="ex.: Mota"
+                {...form.getInputProps('sobrenome')}
+              />
+            </Grid.Col>
+            <Grid.Col md={4} sm={12}>
+              <TextInput
+                withAsterisk
+                label="Lotação"
+                placeholder="ex.: FACOM/UFMS"
+                {...form.getInputProps('lotacao')}
+              />
+            </Grid.Col>
+            <Grid.Col md={6} sm={12}>
+              <TextInput
+                withAsterisk
+                label="Senha"
+                placeholder="ex.: 123456"
+                type={"password"}
+                {...form.getInputProps('senha_1')}
+              />
+            </Grid.Col>
+            <Grid.Col md={6} sm={12}>
+              <TextInput
+                withAsterisk
+                label="Confirme sua senha"
+                placeholder="ex.: 123456"
+                type={"password"}
+                {...form.getInputProps('senha_2')}
+              />
+            </Grid.Col>
+          </Grid>
 
-        <Group position="right" mt="xl">
-          <Button type="submit">Cadastrar</Button>
-        </Group>
-      </form>
-    </Paper >
+          <Group position="right" mt="xl">
+            <Button onClick={(e) => Router.push('/login')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Já tenho conta</Button>
+            <Button type="submit">Cadastrar</Button>
+          </Group>
+        </form>
+      </Paper >
+    </Grid.Col>
+    </Grid>
   );
 }

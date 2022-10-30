@@ -18,7 +18,7 @@ const initialState = {
 
 const user_data = [];
 
-const reducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case "HYDRATE":
       return { ...state, ...action.payload.user };
@@ -35,4 +35,4 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export default reducer;
+export default userReducer;

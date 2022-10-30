@@ -6,10 +6,8 @@ import { useState } from 'react';
 import { showNotification } from '@mantine/notifications';
 import Router from 'next/router'
 import { useSelector, useDispatch } from "react-redux";
-import store from '../store/reducers/users';
-
 import { userUpdate } from "../store/actions/users";
-import { storeWrapper } from '../store';
+import store from '../store/index';
 
 
 export default function SignupPage() {
@@ -59,13 +57,9 @@ const users = useSelector((state) => state.users);
         user_detail.refresh_token = data.refresh_token
         user_detail.access_token = data.access_token
         
-        console.log(user_detail)
-
         dispatch(userUpdate(user_detail));
-
-        console.log(users)
-
-            // Router.push('/');
+        
+        Router.push('/');
 
       }
       else{
@@ -85,7 +79,10 @@ const users = useSelector((state) => state.users);
   };
 
   return (
-    <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
+    <Grid style={{justifyContent: "center"}}>
+      <Grid.Col md={4} sm={12}>
+      <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
+      
       <Title order={1} style={{color: "#495057" }}>Login</Title>
       <Text size="lg">Preencha os campos para autenticar-se</Text>
       <hr style={{color: "#495057", marginBottom: "30px", opacity: "0.2"}} />
@@ -112,9 +109,12 @@ const users = useSelector((state) => state.users);
         </Grid>
 
         <Group position="right" mt="xl">
+        <Button onClick={(e) => Router.push('/signup')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Não tenho conta</Button>
           <Button type="submit">Entrar</Button>
         </Group>
       </form>
     </Paper >
+    </Grid.Col>
+    </Grid>
   );
 }
