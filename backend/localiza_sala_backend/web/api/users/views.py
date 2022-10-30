@@ -1,13 +1,19 @@
 from re import sub
-from typing import List
+import os
+from typing import List, Union, Any
 from datetime import datetime
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from fastapi.param_functions import Depends
 from fastapi.responses import JSONResponse
 from localiza_sala_backend.db.dao.users_dao import UsersDAO
 from localiza_sala_backend.db.models.users_model import UsersModel
-from localiza_sala_backend.web.api.users.schema import UsersModelDTO, UsersModelInputDTO, UsersModelLoginInput
+from localiza_sala_backend.web.api.users.schema import UsersModelDTO, UsersModelInputDTO, TokenPayload
 from localiza_sala_backend.services import hash as hash_service
+from localiza_sala_backend.services.auth import reuseable_oauth
+from fastapi.security import OAuth2PasswordRequestForm
+from jose import jwt
+from pydantic import ValidationError
+
 router = APIRouter()
 
 
@@ -27,8 +33,30 @@ router = APIRouter()
 #     """
 #     return await dummy_dao.get_all_dummies(limit=limit, offset=offset)
 
+
+
+@router.get("/me", status_code=200)
+async def get_current_user(users_dao: UsersDAO = Depends(), token: str = Depends(reuseable_oauth)) -> UsersModelDTO:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+       
+        token_data = TokenPayload(**payload)
+    
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        user = await users_dao.get_user_by_email(token_data.sub)
+        return UsersModelDTO.from_orm(user)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Usuário não encontrado"})
+
 @router.put('/', status_code=200)
-async def update_user(user: UsersModelInputDTO, users_dao: UsersDAO = Depends()):
+async def update_user(user: UsersModelInputDTO, users_dao: UsersDAO = Depends(), user_request: UsersModelDTO = Depends(get_current_user)):
     """
     Update user.
 
@@ -36,12 +64,11 @@ async def update_user(user: UsersModelInputDTO, users_dao: UsersDAO = Depends())
     :param users_dao: DAO for users.
     :return: updated user.
     """
+
     user.dt_atualizacao = datetime.now()
-    user.atualizado_por = 1
+    user.atualizado_por = user_request.id
     user.senha = hash_service.get_hashed_password(user.senha)
     
-    print(user.id)
-
     try:
         await users_dao.update_user(user)
     except Exception as e:
@@ -50,7 +77,7 @@ async def update_user(user: UsersModelInputDTO, users_dao: UsersDAO = Depends())
     return JSONResponse(status_code=200, content={"message": "Usuário atualizado com sucesso!"})
 
 @router.post('/login', status_code=200)
-async def login_user(user: UsersModelLoginInput, users_dao: UsersDAO = Depends()):
+async def login_user(form: OAuth2PasswordRequestForm = Depends(), users_dao: UsersDAO = Depends()):
     """
     Login user.
 
@@ -58,6 +85,10 @@ async def login_user(user: UsersModelLoginInput, users_dao: UsersDAO = Depends()
     :param users_dao: DAO for users.
     :return: logged user.
     """
+    user = UsersModel()
+    user.email = form.username
+    user.senha = form.password
+
     check_user = await users_dao.get_user_by_email(user.email)
     
     if check_user is None:
@@ -78,7 +109,8 @@ async def login_user(user: UsersModelLoginInput, users_dao: UsersDAO = Depends()
 async def get_users(
     limit: int = 25,
     offset: int = 0,
-    users_dao: UsersDAO = Depends()
+    users_dao: UsersDAO = Depends(),
+    user: UsersModelDTO = Depends(reuseable_oauth)
 ) -> List[UsersModel]:
     return await users_dao.get_all_users(limit=limit, offset=offset)
 

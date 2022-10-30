@@ -67,3 +67,6 @@ class UsersModelInputDTO(BaseModel):
             }
         }
 
+class TokenPayload(BaseModel):
+    exp: int
+    sub: str
