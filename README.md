@@ -1,6 +1,7 @@
 # 🗺 gerenciador_de_sala 
-
-Esse é o repositório do projeto gerenciador_de_salas, que é um projeto de gerenciamento de salas de uma universidade. 
+<img src="././frontend/docs/screenshots/pagina_inicial.png" alt="pagina_inicial" width="700px">
+<br></br>
+Esse é o repositório do projgerenciador_de_salas, que é um projeto de gerenciamento de salas de uma universidade. 
 O projeto foi desenvolvido para ser o trabalho final da disciplina de Programação para Web do curso de Engenharia de Software da Universidade Federal do Mato Grosso do Sul.
 
 # 💻 Tecnologias 
