@@ -25,7 +25,7 @@ import {
   IconChevronDown,
 } from '@tabler/icons';
 import { useSelector } from 'react-redux';
-import Router from 'next/router';
+import { useRouter } from 'next/router'
 
 
 
@@ -110,6 +110,8 @@ const useStyles = createStyles((theme) => ({
 
 export function Navbar() {
 
+  const router = useRouter()
+
   
   const { classes, theme, cx } = useStyles();
   const [opened, { toggle }] = useDisclosure(false);
@@ -129,13 +131,18 @@ const data = {
   ],
 };
 
+const handleLogout = () => {
+  localStorage.clear();
+  router.reload(window.location.pathname)
+}
+
 
 
   const tabs = data.tabs 
   const user = data.user
 
   const items = tabs.map((tab) => (
-    <Tabs.Tab value={tab.title} key={tab.title} onClick={(e) => Router.push(tab.href)}>
+    <Tabs.Tab value={tab.title} key={tab.title} onClick={(e) => router.push(tab.href)}>
     {tab.title}
   </Tabs.Tab>
     ));
@@ -175,7 +182,7 @@ const data = {
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Label>Opções</Menu.Label>
-              <Menu.Item icon={<IconLogout size={14} stroke={1.5} />}>Sair</Menu.Item>
+              <Menu.Item icon={<IconLogout size={14} stroke={1.5} onClick={(e) => handleLogout()} />}>Sair</Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Group>

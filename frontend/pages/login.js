@@ -8,7 +8,7 @@ import Router from 'next/router'
 import { useSelector, useDispatch } from "react-redux";
 import { userUpdate } from "../store/actions/users";
 import store from '../store/index';
-
+import React from 'react'
 
 export default function SignupPage() {
   const [visible, setVisible] = useState(false);
@@ -18,66 +18,88 @@ export default function SignupPage() {
     senha: Yup.string().min(6, 'Sua senha deve ter pelo menos 6 caracteres').required('Senha é obrigatória'),
 });
 
+
+const user_logado = useSelector((state) => state.user);
+
+const checkUserLogado = () => {
+  if(user_logado.access_token != null){
+    showNotification({
+      title: 'Você já está logado!',
+      message: 'Agora você pode agendar salas! :)',
+      color: 'teal',
+      position: 'br',
+    });
+
+    Router.push('/');
+  }
+} 
+
+React.useEffect(() => {
+  checkUserLogado()
+}, []);
+
+
 const users = useSelector((state) => state.users);
 
 
-  const form = useForm({
-    validate: yupResolver(schema),
-    initialValues: {
-      name: '',
-      email: '',
-      age: 18,
-    },
-  });
+const form = useForm({
+  validate: yupResolver(schema),
+  initialValues: {
+    name: '',
+    email: '',
+    age: 18,
+  },
+});
 
-  const handleSubmit = async (values) => {
-    let data;
-    setVisible((v) => !v);
-   
-    const formData = new FormData();
-    formData.append('username', values.email);
-    formData.append('password', values.senha);
+const handleSubmit = async (values) => {
+  let data;
+  setVisible((v) => !v);
+  
+  const formData = new FormData();
+  formData.append('username', values.email);
+  formData.append('password', values.senha);
 
 
-    try{
-      const response = await fetch('http://localhost:8000/api/users/login', {
-        method: 'POST',
-        body: formData
+  try{
+    const response = await fetch('http://localhost:8000/api/users/login', {
+      method: 'POST',
+      body: formData
+    });
+    data = await response.json();
+    if(response.status == 200){
+      showNotification({
+        title: 'Usuário autenticado com sucesso!',
+        message: 'Agora você pode agendar salas! :)',
+        color: 'teal',
+        position: 'br',
       });
-      data = await response.json();
-      if(response.status == 200){
-        showNotification({
-          title: 'Usuário autenticado com sucesso!',
-          message: 'Agora você pode agendar salas! :)',
-          color: 'teal',
-          position: 'br',
-        });
-        
-        let user_detail = JSON.parse(data.user_detail)
-        user_detail.refresh_token = data.refresh_token
-        user_detail.access_token = data.access_token
-        
-        dispatch(userUpdate(user_detail));
-        
-        Router.push('/');
-
-      }
-      else{
-        showNotification({
-          title: 'Erro ao fazer login',
-          message: "Que pena! Não foi possível fazer login. Verifique se o email e a senha estão corretos.",
-          color: 'red',
-          position: 'br',
-        });
-      }
+      
+      let user_detail = JSON.parse(data.user_detail)
+      user_detail.refresh_token = data.refresh_token
+      user_detail.access_token = data.access_token
+      
+      dispatch(userUpdate(user_detail));
+      
+      Router.push('/');
 
     }
-    catch(error){
-      console.log(error);
+    else{
+      showNotification({
+        title: 'Erro ao fazer login',
+        message: "Que pena! Não foi possível fazer login. Verifique se o email e a senha estão corretos.",
+        color: 'red',
+        position: 'br',
+      });
     }
-    setVisible((v) => !v);
-  };
 
+  }
+  catch(error){
+    console.log(error);
+  }
+  setVisible((v) => !v);
+};
+
+  
   return (
     <Grid style={{justifyContent: "center"}}>
       <Grid.Col md={4} sm={12}>

@@ -2,10 +2,12 @@ import * as Yup from 'yup';
 import { useForm, yupResolver } from '@mantine/form';
 import { NumberInput, TextInput, Button, Box, Group, Paper, Title, Text, LoadingOverlay, Notification } from '@mantine/core';
 import { Grid } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
 import Router from 'next/router'
-
+import { useSelector, useDispatch } from "react-redux";
+import React from 'react';
+import App from 'next/app';
 export default function SignupPage() {
   const [visible, setVisible] = useState(false);
 
@@ -18,6 +20,25 @@ export default function SignupPage() {
     senha_2: Yup.string().min(6, 'Sua senha deve ter pelo menos 6 caracteres').oneOf([Yup.ref('senha_1'), null], 'As senhas não conferem').required('Senha é obrigatória'),
   });
 
+  const user_logado = useSelector((state) => state.user);
+
+  const checkUserLogado = () => {
+    if(user_logado.access_token != null){
+      showNotification({
+        title: 'Você já está logado!',
+        message: 'Agora você pode agendar salas! :)',
+        color: 'teal',
+        position: 'br',
+      });
+  
+      Router.push('/');
+    }
+  } 
+  
+  useEffect(() => {
+    checkUserLogado();
+  }, []);
+  
   const form = useForm({
     validate: yupResolver(schema),
     initialValues: {
