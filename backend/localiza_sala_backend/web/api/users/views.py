@@ -103,7 +103,8 @@ async def login_user(form: OAuth2PasswordRequestForm = Depends(), users_dao: Use
     return JSONResponse(status_code=200, 
      content={"message": "Usuário logado com sucesso!",
      "access_token": access_token,
-     "refresh_token": refresh_token})
+     "refresh_token": refresh_token,
+     "user_detail": UsersModelDTO.from_orm(check_user).json()})
 
 @router.get('/', response_model=List[UsersModelDTO])
 async def get_users(

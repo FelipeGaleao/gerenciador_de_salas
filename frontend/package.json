@@ -8,10 +8,28 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@mantine/core": "^5.6.3",
+    "@mantine/dates": "^5.6.3",
+    "@mantine/dropzone": "^5.6.3",
+    "@mantine/form": "^5.6.3",
+    "@mantine/hooks": "^5.6.3",
+    "@mantine/modals": "^5.6.3",
+    "@mantine/next": "^5.6.3",
+    "@mantine/notifications": "^5.6.3",
+    "@mantine/nprogress": "^5.6.3",
+    "@mantine/spotlight": "^5.6.3",
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
+    "@tabler/icons": "^1.108.0",
+    "axios": "^1.1.3",
+    "dayjs": "^1.11.6",
     "next": "latest",
+    "next-redux-wrapper": "^8.0.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-redux": "^8.0.4",
+    "redux": "^4.2.0",
+    "tabler": "^1.0.0-alpha.8",
+    "yup": "^0.32.11"
   }
 }
