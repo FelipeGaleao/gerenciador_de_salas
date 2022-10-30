@@ -86,7 +86,7 @@ const handleSubmit = async (values) => {
     else{
       showNotification({
         title: 'Erro ao fazer login',
-        message: "Que pena! Não foi possível fazer login. Verifique se o email e a senha estão corretos.",
+        message: "Que pena! Não foi possível fazer login. \n " + data.message,
         color: 'red',
         position: 'br',
       });
@@ -125,6 +125,7 @@ const handleSubmit = async (values) => {
                 label="Senha"
                 placeholder="Digite sua senha"
                 required
+                type={"password"}
                 {...form.getInputProps('senha')}
             />
         </Grid.Col>
