@@ -54,7 +54,7 @@ async def login_user(user: UsersModelLoginInput, users_dao: UsersDAO = Depends()
     """
     Login user.
 
-    :param user: user to login.
+    :param user: dados para login.
     :param users_dao: DAO for users.
     :return: logged user.
     """
