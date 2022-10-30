@@ -19,7 +19,7 @@ Para o desenvolvimento da aplicação, foram utilizadas as seguintes tecnologias
 Para o desenvolvimento do frontend, foi utilizado o framework ReactJS/NextJS, com as seguintes tecnologias:
 - [ReactJS](https://reactjs.org/)
 - [NextJS](https://nextjs.org/) 
-- [Material UI](https://mui.com/pt/)
+- [Mantine](https://mantine.dev/)
 
 
 
