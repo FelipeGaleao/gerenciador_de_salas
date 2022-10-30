@@ -152,7 +152,7 @@ const handleLogout = () => {
     <div className={classes.header}>
       <Container className={classes.mainSection}>
         <Group position="apart">
-          <Image src="/ufms_logo_positivo_assinatura_horizontal_pb_rgb_fundo_vazado.png" width="300px" height="104.62px"/>
+          <Image src="/logo_ufms.png" width="300px" height="104.62px"/>
           <Burger
             opened={opened}
             onClick={toggle}
