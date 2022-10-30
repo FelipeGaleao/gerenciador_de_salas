@@ -14,7 +14,7 @@ function App({ Component, pageProps, ...rest }) {
   return (
     <>
       <Head>
-        <title>Page title</title>
+        <title>Localiza Sala | UFMS</title>
         <link rel="shortcut icon" href="/favicon.svg" />
         <meta
           name="viewport"
