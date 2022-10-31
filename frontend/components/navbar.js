@@ -129,6 +129,7 @@ const data = {
     { title: 'Login', href: '/login' },
     { title: 'Cadastro', href: '/signup' },
     { title: 'Agendamentos', href: '/agendamento' },
+    { title: 'Salas', href: '/rooms' },
   ],
 };
 
