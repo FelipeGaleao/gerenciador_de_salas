@@ -9,6 +9,7 @@ services:
         APP_ENV: development
       volumes:
         - ../frontend/:/app/
+        - /app/node_modules
       ports:
         - "3000:3000"
   api:
