@@ -109,18 +109,18 @@ class TeachersDAO:
             await self.session.rollback()
             raise e
 
-    # async def delete_room_by_id(self, id: int) -> None:
-    #     """
-    #     Deleta uma sala pelo id.
+    async def delete_teacher_by_id(self, id: int) -> None:
+        """
+        Deleta um professor pelo id
 
-    #     :param id: id da sala.
-    #     """
-    #     raw_user = await self.session.execute(
-    #         select(RoomsModel).where(RoomsModel.id == id),
-    #     )
-    #     try: 
-    #         room = raw_user.scalars().one()
-    #         await self.session.delete(room)
-    #         await self.session.commit()
-    #     except:
-    #         raise Exception("Sala não foi encontrada.")
+        :param id: id do professor.
+        """
+        raw_user = await self.session.execute(
+            select(TeachersModel).where(TeachersModel.id == id),
+        )
+        try: 
+            room = raw_user.scalars().one()
+            await self.session.delete(room)
+            await self.session.commit()
+        except:
+            raise Exception("Professor não foi encontrado.")

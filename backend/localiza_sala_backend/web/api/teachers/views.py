@@ -62,25 +62,25 @@ async def get_teacher_by_id(teachers_dao: TeachersDAO = Depends(), token: str = 
         print(e)
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Professor não encontrado"})
 
-# @router.delete("/delete_room_by_id", status_code=200)
-# async def delete_room_by_id(rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> RoomModelView:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+@router.delete("/delete_teacher_by_id", status_code=200)
+async def delete_teacher_by_id(teachers_dao: TeachersDAO = Depends(), token: str = Depends(reuseable_oauth), teacher_id: int = 0) -> TeachersModelUpdate:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
        
-#         token_data = TokenPayload(**payload)
+        token_data = TokenPayload(**payload)
     
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         room = await rooms_dao.delete_room_by_id(room_id)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
-#     return JSONResponse(status_code=200, content={"message": "Sala deletada com sucesso!"})
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        teacher = await teachers_dao.delete_teacher_by_id(teacher_id)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Professor não encontrado"})
+    return JSONResponse(status_code=200, content={"message": "Professor deletado com sucesso!"})
 
 @router.put('/', status_code=200)
 async def update_teacher(teacher_to_edit: TeachersModelUpdate, users_dao: UsersDAO = Depends(), teacher_dao: TeachersDAO = Depends(), token: str = Depends(reuseable_oauth)):

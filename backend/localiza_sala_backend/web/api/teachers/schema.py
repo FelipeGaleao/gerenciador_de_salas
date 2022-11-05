@@ -9,7 +9,7 @@ class TeachersModelUpdate(BaseModel):
     lotacao: str = Field(..., example="Departamento de Ciências Exatas")
     dt_criacao: Union[datetime, None] = Field(None, example=datetime.now())
     dt_atualizacao: Union[datetime, None] = Field(None, example=datetime.now())
-    criado_por: int = Field(..., example=1)
+    criado_por: Union[int, None] = Field(None, example=1)
     atualizado_por: Union[int, None] = Field(None, example=1)
     siafi: Union[int, None] = Field(None, example=123456)
 
@@ -20,7 +20,7 @@ class TeacherModelView(BaseModel):
     lotacao: str = Field(..., example="Departamento de Ciências Exatas")
     dt_criacao: datetime = Field(..., example=datetime.now())
     dt_atualizacao: datetime = Field(..., example=datetime.now())
-    criado_por: int = Field(..., example=1)
+    criado_por: Union[int, None] = Field(None, example=1)
     atualizado_por: Union[int, None] = Field(None, example=1)
     siafi: Union[int, None] = Field(None, example=123456)
 
