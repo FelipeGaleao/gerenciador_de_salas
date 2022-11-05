@@ -109,11 +109,10 @@ router = APIRouter()
 #      "user_detail": UsersModelDTO.from_orm(check_user).json()})
 
 @router.get('/', response_model=List[RoomModelView])
-async def get_users(
+async def get_rooms(
     limit: int = 25,
     offset: int = 0,
     rooms_dao: RoomsDAO = Depends(),
-    room: RoomModelView = Depends(reuseable_oauth)
 ) -> List[RoomModelView]:
     return await rooms_dao.get_all_rooms(limit=limit, offset=offset)
 
@@ -124,7 +123,7 @@ async def create_new_room(
     users_dao: UsersDAO = Depends(),
     room_dao: RoomsDAO = Depends(),
     token: str = Depends(reuseable_oauth)
-) -> RoomModelsDTO:
+) -> None:
     """Método para criar uma nova sala.
 
     Args: 
@@ -153,7 +152,6 @@ async def create_new_room(
     new_room.dt_criacao = datetime.now()
     new_room.dt_atualizacao = datetime.now()
     new_room.criado_por = user_detail.id
-    
     try:
         await room_dao.create_room(**new_room.dict())
     except Exception as e:

@@ -4,10 +4,12 @@ import { NumberInput, TextInput, Button, Box, Group, Paper, Title, Text, Loading
 import { Grid } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
-import Router from 'next/router'
+import Router from 'next/router';
 import { useSelector, useDispatch } from "react-redux";
 import React from 'react';
 import App from 'next/app';
+
+
 export default function SignupPage() {
   const [visible, setVisible] = useState(false);
 
@@ -23,22 +25,22 @@ export default function SignupPage() {
   const user_logado = useSelector((state) => state.user);
 
   const checkUserLogado = () => {
-    if(user_logado.access_token != null){
+    if (user_logado.access_token != null) {
       showNotification({
         title: 'Você já está logado!',
         message: 'Agora você pode agendar salas! :)',
         color: 'teal',
         position: 'br',
       });
-  
+
       Router.push('/');
     }
-  } 
-  
+  }
+
   useEffect(() => {
     checkUserLogado();
   }, []);
-  
+
   const form = useForm({
     validate: yupResolver(schema),
     initialValues: {
@@ -51,7 +53,7 @@ export default function SignupPage() {
   const handleSubmit = async (values) => {
     let data;
     setVisible((v) => !v);
-   
+
     const user_to_create = {
       "nome": values.nome,
       "sobrenome": values.sobrenome,
@@ -60,7 +62,7 @@ export default function SignupPage() {
       "senha": values.senha_1,
     }
 
-    try{
+    try {
       const response = await fetch('http://localhost:8000/api/users/', {
         method: 'POST',
         headers: {
@@ -69,18 +71,18 @@ export default function SignupPage() {
         body: JSON.stringify(user_to_create),
       });
       data = await response.json();
-      if(response.status == 200){
+      if (response.status == 200) {
         showNotification({
           title: 'Usuário criado com sucesso!',
           message: 'Agora você pode fazer login.' + data.message,
           color: 'teal',
           position: 'br',
         });
-        
+
         Router.push('/login');
 
       }
-      else{
+      else {
         showNotification({
           title: 'Erro ao criar usuário',
           message: data.message,
@@ -90,7 +92,7 @@ export default function SignupPage() {
       }
 
     }
-    catch(error){
+    catch (error) {
       console.log(error);
     }
     console.log(data)
@@ -98,75 +100,75 @@ export default function SignupPage() {
   };
 
   return (
-    <Grid style={{justifyContent: "center"}}>
-    <Grid.Col md={8} sm={12}>
-      <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
-        <Title order={1} style={{color: "#495057" }}>Cadastro</Title>
-        <Text size="lg">Preencha os campos abaixo para criar sua conta</Text>
-        <hr style={{color: "#495057", marginBottom: "30px", opacity: "0.2"}} />
-        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+    <Grid style={{ justifyContent: "center" }}>
+      <Grid.Col md={8} sm={12}>
+        <Paper shadow="xl" radius="md" p="lg" withBorder style={{ padding: "60px" }}>
+          <Title order={1} style={{ color: "#495057" }}>Cadastro</Title>
+          <Text size="lg">Preencha os campos abaixo para criar sua conta</Text>
+          <hr style={{ color: "#495057", marginBottom: "30px", opacity: "0.2" }} />
+          <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
 
-          <Grid>
-          <LoadingOverlay visible={visible} overlayBlur={1.5} />
+            <Grid>
+              <LoadingOverlay visible={visible} overlayBlur={1.5} />
 
-            <Grid.Col md={12} sm={12}> <TextInput
-              withAsterisk
-              label="Email"
-              placeholder="ex.: maycon.mota@ufms.br"
-              {...form.getInputProps('email')}
-            />
-            </Grid.Col>
-            <Grid.Col md={4} sm={12}>
-              <TextInput
+              <Grid.Col md={12} sm={12}> <TextInput
                 withAsterisk
-                label="Nome"
-                placeholder="ex.: Maycon"
-                {...form.getInputProps('nome')}
+                label="Email"
+                placeholder="ex.: maycon.mota@ufms.br"
+                {...form.getInputProps('email')}
               />
-            </Grid.Col>
-            <Grid.Col md={4} sm={12}>
-              <TextInput
-                withAsterisk
-                label="Sobrenome"
-                placeholder="ex.: Mota"
-                {...form.getInputProps('sobrenome')}
-              />
-            </Grid.Col>
-            <Grid.Col md={4} sm={12}>
-              <TextInput
-                withAsterisk
-                label="Lotação"
-                placeholder="ex.: FACOM/UFMS"
-                {...form.getInputProps('lotacao')}
-              />
-            </Grid.Col>
-            <Grid.Col md={6} sm={12}>
-              <TextInput
-                withAsterisk
-                label="Senha"
-                placeholder="ex.: 123456"
-                type={"password"}
-                {...form.getInputProps('senha_1')}
-              />
-            </Grid.Col>
-            <Grid.Col md={6} sm={12}>
-              <TextInput
-                withAsterisk
-                label="Confirme sua senha"
-                placeholder="ex.: 123456"
-                type={"password"}
-                {...form.getInputProps('senha_2')}
-              />
-            </Grid.Col>
-          </Grid>
+              </Grid.Col>
+              <Grid.Col md={4} sm={12}>
+                <TextInput
+                  withAsterisk
+                  label="Nome"
+                  placeholder="ex.: Maycon"
+                  {...form.getInputProps('nome')}
+                />
+              </Grid.Col>
+              <Grid.Col md={4} sm={12}>
+                <TextInput
+                  withAsterisk
+                  label="Sobrenome"
+                  placeholder="ex.: Mota"
+                  {...form.getInputProps('sobrenome')}
+                />
+              </Grid.Col>
+              <Grid.Col md={4} sm={12}>
+                <TextInput
+                  withAsterisk
+                  label="Lotação"
+                  placeholder="ex.: FACOM/UFMS"
+                  {...form.getInputProps('lotacao')}
+                />
+              </Grid.Col>
+              <Grid.Col md={6} sm={12}>
+                <TextInput
+                  withAsterisk
+                  label="Senha"
+                  placeholder="ex.: 123456"
+                  type={"password"}
+                  {...form.getInputProps('senha_1')}
+                />
+              </Grid.Col>
+              <Grid.Col md={6} sm={12}>
+                <TextInput
+                  withAsterisk
+                  label="Confirme sua senha"
+                  placeholder="ex.: 123456"
+                  type={"password"}
+                  {...form.getInputProps('senha_2')}
+                />
+              </Grid.Col>
+            </Grid>
 
-          <Group position="right" mt="xl">
-            <Button onClick={(e) => Router.push('/login')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Já tenho conta</Button>
-            <Button type="submit">Cadastrar</Button>
-          </Group>
-        </form>
-      </Paper >
-    </Grid.Col>
+            <Group position="right" mt="xl">
+              <Button onClick={(e) => Router.push('/login')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Já tenho conta</Button>
+              <Button type="submit">Cadastrar</Button>
+            </Group>
+          </form>
+        </Paper >
+      </Grid.Col>
     </Grid>
   );
 }

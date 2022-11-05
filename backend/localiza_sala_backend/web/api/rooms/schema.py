@@ -6,7 +6,7 @@ class RoomModelView(BaseModel):
     id: int = Field(..., example=1)
     nome_sala: str = Field(..., example="Sala 1")
     lotacao: int = Field(..., example=10)
-    observacao: str = Field(..., example="Sala 1")
+    observacao: Union[str, None] = Field(..., example="Sala 1")
     agendavel: bool = Field(..., example=True)
     dt_criacao: datetime = Field(..., example=datetime.now())
     dt_atualizacao: datetime = Field(..., example=datetime.now())
@@ -27,11 +27,11 @@ class RoomModelsDTO(BaseModel):
 
     nome_sala: str = Field(..., example="Sala 1")
     lotacao: int = Field(..., example=10)
-    observacao: str = Field(..., example="Sala com ar condicionado")
-    agendavel: bool = Field(..., example=True)
-    dt_criacao: datetime = Field(..., example="2022-10-30 20:51:50.862505")
-    dt_atualizacao: datetime = Field(..., example="2022-10-30 20:51:50.862505")
-    criado_por: Union[int, None] = Field(..., example=1)
+    observacao: Union[str, None] = Field(..., example="Sala com ar condicionado")
+    agendavel: Union[bool, None] = Field(..., example=True)
+    dt_criacao: Union[datetime, None] = Field(None, example="2022-10-30 20:51:50.862505")
+    dt_atualizacao: Union[datetime, None] = Field(None, example="2022-10-30 20:51:50.862505")
+    criado_por: Union[int, None] = Field(None, example=1)
     
 
     class Config:
