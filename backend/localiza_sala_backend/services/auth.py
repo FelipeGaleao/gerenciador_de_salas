@@ -19,3 +19,4 @@ JWT_REFRESH_SECRET_KEY = os.environ['JWT_REFRESH_SECRET_KEY']      # should be k
 reuseable_oauth = OAuth2PasswordBearer(
     tokenUrl="/api/users/login",
 )
+

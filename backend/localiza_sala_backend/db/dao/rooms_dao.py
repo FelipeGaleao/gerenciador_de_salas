@@ -47,3 +47,43 @@ class RoomsDAO:
             select(RoomsModel).limit(limit).offset(offset),
         )
         return raw_users.scalars().fetchall()
+
+    async def get_room_by_id(self, id: int) -> Optional[RoomsModel]:
+        """
+        Retorna uma sala pelo id.
+
+        :param id: id da sala.
+        :return: sala.
+        """
+        raw_user = await self.session.execute(
+            select(RoomsModel).where(RoomsModel.id == id),
+        )
+        try: 
+            return raw_user.scalars().one()
+        except:
+            return None
+
+    async def update_room(self, room: RoomsModel) -> None:
+        """
+        Atualiza uma sala.
+        """
+        
+        check_room = await self.session.execute(
+                    select(RoomsModel).where(RoomsModel.id == room.room_id),
+                )
+
+        check_room = check_room.scalars().first()
+        
+        if not check_room:
+            raise Exception("Sala não foi encontrada.")
+
+        room_data = room.dict(exclude_unset=True)
+        for key, value in room_data.items():
+            setattr(check_room, key, value)
+        try:
+            await self.session.commit()
+            return room_data
+        except Exception as e:
+            print(e)
+            await self.session.rollback()
+            raise e

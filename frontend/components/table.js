@@ -54,8 +54,8 @@ function Th({ children, reversed, sorted, onSort }) {
 }
 
 function filterData(data, search) {
-  const query = search.toLowerCase().trim();
-  return data.filter((item) => keys(item).some((key) => item[key].toLowerCase().includes(query)));
+  const query = search.toString().toLowerCase().trim();
+  return data.filter((item) => keys(item).some((key) => item[key] != null ? item[key].toString().toLowerCase().includes(query) : null));
 }
 
 function sortData(
@@ -71,10 +71,10 @@ function sortData(
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
-        return b[sortBy].localeCompare(a[sortBy]);
+        return b[sortBy].toString().localeCompare(a[sortBy].toString());
       }
 
-      return a[sortBy].localeCompare(b[sortBy]);
+      return a[sortBy].toString().localeCompare(b[sortBy].toString());
     }),
     payload.search
   );
@@ -103,13 +103,13 @@ export function TableSort({data}) {
     <tr key={row.id}>
     <td>{row.id}</td>
     <td>{row.nome_sala}</td>
-    <td>{row.observacao}</td>
+    <td>{row.observacao ? row.observacao : '-'}</td>
     <td>{row.lotacao}</td>
     <td>{row.agendavel ? 'Sim' : 'Não'}</td>
     <td>{row.criado_por}</td>
     <td>{row.dt_criacao}</td>
-    <td>{row.atualizado_por}</td>
-    <td>{row.dt_atualizacao}</td>
+    <td>{row.atualizado_por ? row.atualizado_por : '-'}</td>
+    <td>{row.dt_atualizacao ? row.dt_atualizacao : '-'}</td>
     </tr>
   ));
 
@@ -202,7 +202,7 @@ export function TableSort({data}) {
             <tr>
               <td colSpan={Object.keys(data[0]).length}>
                 <Text weight={500} align="center">
-                  Nothing found
+                  Nada encontrado
                 </Text>
               </td>
             </tr>

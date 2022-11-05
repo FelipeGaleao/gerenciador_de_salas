@@ -36,3 +36,22 @@ class RoomModelsDTO(BaseModel):
 
     class Config:
         orm_mode = True
+
+class RoomsModelUpdate(BaseModel):
+    """
+    DTO for Room Model
+
+    Valores retornados ao acessar usuários.
+    """
+    room_id: int = Field(..., example=1)
+    nome_sala: Union[str, None] = Field(None, example="Sala 1")
+    lotacao: Union[int, None] = Field(None, example=10)
+    observacao: Union[str, None] = Field(None, example="Sala com ar condicionado")
+    agendavel: Union[bool, None] = Field(None, example=True)
+    dt_criacao: Union[datetime, None] = Field(None, example="2022-10-30 20:51:50.862505")
+    dt_atualizacao: Union[datetime, None] = Field(None, example="2022-10-30 20:51:50.862505")
+    criado_por: Union[int, None] = Field(None, example=1)
+    atualizado_por: Union[int, None] = Field(None, example=1)
+
+    class Config:
+        orm_mode = True

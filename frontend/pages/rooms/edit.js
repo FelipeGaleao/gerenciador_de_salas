@@ -8,11 +8,14 @@ import Router from 'next/router';
 import { useSelector, useDispatch } from "react-redux";
 import React from 'react';
 import App from 'next/app';
+import { useRouter } from 'next/router'
 
-export default function RoomsIndexPage() {
+export default function RoomsEditPage() {
     const user_logado = useSelector((state) => state.user);
     const [visible, setVisible] = useState(false);
     let [rooms, setRooms] = useState([]);
+
+    let room_id = useRouter().query.room_id ? useRouter().query.room_id : null;
 
     const schema = Yup.object().shape({
         nome_sala: Yup.string().min(2, 'Seu nome deve ter pelo menos 2 caracteres').required('Nome da sala é obrigatório'),
@@ -25,6 +28,27 @@ export default function RoomsIndexPage() {
         },
     });
 
+    const getRoomById = async (room_id) => {
+        const response = await fetch('http://localhost:8000/api/rooms/get_room_by_id?room_id=' + room_id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user_logado.access_token
+            },
+        });
+        const data = await response.json();
+        if (data.error) {
+            showNotification({
+                title: 'Erro ao buscar sala!',
+                message: data.error,
+                color: 'red',
+                position: 'br',
+            });
+        } else {
+            form.setValues(data);
+        }
+    }
+
     const handleSubmit = async (values) => {
         setVisible((v) => !v);
 
@@ -33,10 +57,11 @@ export default function RoomsIndexPage() {
             'observacao': values.observacao ? values.observacao : null,
             'nome_sala': values.nome_sala,
             'lotacao': values.lotacao,
+            'room_id': room_id,
         };
 
         const response = await fetch('http://localhost:8000/api/rooms', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + user_logado.access_token
@@ -54,7 +79,7 @@ export default function RoomsIndexPage() {
             });
         } else {
             showNotification({
-                title: 'Sala criada com sucesso!',
+                title: 'Sala atualizada com sucesso!',
                 message: data.message + ':)',
                 color: 'teal',
                 position: 'br',
@@ -63,6 +88,11 @@ export default function RoomsIndexPage() {
         }
     }
 
+    useEffect(() => {
+        if (room_id) {
+            getRoomById(room_id);
+        }
+    }, [room_id]);
     return (
         <Container size="xl">
             <Grid>
@@ -71,7 +101,7 @@ export default function RoomsIndexPage() {
                         <Grid grow>
                             <Grid.Col md={10}>
                                 <Title>Salas</Title>
-                                <Title order={4}>Adicionando uma nova sala</Title>
+                                <Title order={4}>Editando sala</Title>
                             </Grid.Col>
                             <hr></hr>
                         </Grid>
@@ -120,7 +150,7 @@ export default function RoomsIndexPage() {
 
                                 <Group position="right" mt="xl">
                                     <Button onClick={(e) => Router.push('/rooms/')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Voltar</Button>
-                                    <Button type="submit">Cadastrar</Button>
+                                    <Button color="green" type="submit">Salvar</Button>
                                 </Group>
                             </form>
                         </Grid.Col>

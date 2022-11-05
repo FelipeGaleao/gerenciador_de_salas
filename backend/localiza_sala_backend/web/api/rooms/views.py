@@ -2,6 +2,7 @@ from re import sub
 import os
 from typing import List, Union, Any
 from datetime import datetime
+from localiza_sala_backend.web.api.rooms.schema import RoomsModelUpdate
 from fastapi import APIRouter, status
 from fastapi.param_functions import Depends
 from fastapi.responses import JSONResponse
@@ -37,46 +38,59 @@ router = APIRouter()
 
 
 
-# @router.get("/me", status_code=200)
-# async def get_current_user(users_dao: UsersDAO = Depends(), token: str = Depends(reuseable_oauth)) -> UsersModelDTO:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+@router.get("/get_room_by_id", status_code=200)
+async def get_room_by_id(rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> RoomModelView:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
        
-#         token_data = TokenPayload(**payload)
+        token_data = TokenPayload(**payload)
     
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         user = await users_dao.get_user_by_email(token_data.sub)
-#         return UsersModelDTO.from_orm(user)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Usuário não encontrado"})
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        room = await rooms_dao.get_room_by_id(room_id)
+        return RoomModelView.from_orm(room)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
 
-# @router.put('/', status_code=200)
-# async def update_user(user: UsersModelInputDTO, users_dao: UsersDAO = Depends(), user_request: UsersModelDTO = Depends(get_current_user)):
-#     """
-#     Update user.
+@router.put('/', status_code=200)
+async def update_room(room_to_edit: RoomsModelUpdate, users_dao: UsersDAO = Depends(), rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth)):
+    """
+    Update user.
 
-#     :param user: user to update.
-#     :param users_dao: DAO for users.
-#     :return: updated user.
-#     """
+    :param user: user to update.
+    :param users_dao: DAO for users.
+    :return: updated user.
+    """
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+        token_data = TokenPayload(**payload)
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        user = await users_dao.get_user_by_email(token_data.sub)
+        user_detail = UsersModelDTO.from_orm(user)
+    except:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
 
-#     user.dt_atualizacao = datetime.now()
-#     user.atualizado_por = user_request.id
-#     user.senha = hash_service.get_hashed_password(user.senha)
-    
-#     try:
-#         await users_dao.update_user(user)
-#     except Exception as e:
-#         return JSONResponse(status_code=500, content={"message": "Erro ao atualizar usuário!", "error_detail": str(e)})
+    room_to_edit.dt_atualizacao = datetime.now()
+    room_to_edit.atualizado_por = user_detail.id
+    try:
+        await rooms_dao.update_room(room_to_edit)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=500, content={"message": "Erro ao atualizar sala!", "error_detail": str(e)})
    
-#     return JSONResponse(status_code=200, content={"message": "Usuário atualizado com sucesso!"})
+    return JSONResponse(status_code=200, content={"message": "Sala atualizada com sucesso!"})
 
 # @router.post('/login', status_code=200)
 # async def login_user(form: OAuth2PasswordRequestForm = Depends(), users_dao: UsersDAO = Depends()):
@@ -152,6 +166,7 @@ async def create_new_room(
     new_room.dt_criacao = datetime.now()
     new_room.dt_atualizacao = datetime.now()
     new_room.criado_por = user_detail.id
+    
     try:
         await room_dao.create_room(**new_room.dict())
     except Exception as e:
