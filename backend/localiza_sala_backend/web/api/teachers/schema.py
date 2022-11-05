@@ -2,6 +2,16 @@ from pydantic import BaseModel, Field
 from datetime import datetime, time, timedelta
 from typing import Union
 
+class TeachersModelUpdate(BaseModel):
+    teacher_id: int = Field(..., example=1)
+    nome: str = Field(..., example="João da Silva")
+    sobrenome: Union[str, None] = Field(None, example="Galvão")
+    lotacao: str = Field(..., example="Departamento de Ciências Exatas")
+    dt_criacao: Union[datetime, None] = Field(None, example=datetime.now())
+    dt_atualizacao: Union[datetime, None] = Field(None, example=datetime.now())
+    criado_por: int = Field(..., example=1)
+    atualizado_por: Union[int, None] = Field(None, example=1)
+    siafi: Union[int, None] = Field(None, example=123456)
 
 class TeacherModelView(BaseModel):
     id: int = Field(..., example=1)
@@ -12,6 +22,7 @@ class TeacherModelView(BaseModel):
     dt_atualizacao: datetime = Field(..., example=datetime.now())
     criado_por: int = Field(..., example=1)
     atualizado_por: Union[int, None] = Field(None, example=1)
+    siafi: Union[int, None] = Field(None, example=123456)
 
     class Config:
         orm_mode = True

@@ -69,45 +69,45 @@ class TeachersDAO:
         )
         return raw_users.scalars().fetchall()
 
-    # async def get_room_by_id(self, id: int) -> Optional[RoomsModel]:
-    #     """
-    #     Retorna uma sala pelo id.
+    async def get_teacher_by_id(self, id: int) -> Optional[TeachersModel]:
+        """
+        Retorna uma sala pelo id.
 
-    #     :param id: id da sala.
-    #     :return: sala.
-    #     """
-    #     raw_user = await self.session.execute(
-    #         select(RoomsModel).where(RoomsModel.id == id),
-    #     )
-    #     try: 
-    #         return raw_user.scalars().one()
-    #     except:
-    #         return None
+        :param id: id da sala.
+        :return: sala.
+        """
+        raw_user = await self.session.execute(
+            select(TeachersModel).where(TeachersModel.id == id),
+        )
+        try: 
+            return raw_user.scalars().one()
+        except:
+            return None
 
-    # async def update_room(self, room: RoomsModel) -> None:
-    #     """
-    #     Atualiza uma sala.
-    #     """
+    async def update_teacher(self, teacher: TeachersModel) -> None:
+        """
+        Atualiza um professor.
+        """
         
-    #     check_room = await self.session.execute(
-    #                 select(RoomsModel).where(RoomsModel.id == room.room_id),
-    #             )
+        check_teacher = await self.session.execute(
+                    select(TeachersModel).where(TeachersModel.id == teacher.teacher_id),
+                )
 
-    #     check_room = check_room.scalars().first()
+        check_teacher = check_teacher.scalars().first()
         
-    #     if not check_room:
-    #         raise Exception("Sala não foi encontrada.")
+        if not check_teacher:
+            raise Exception("Sala não foi encontrada.")
 
-    #     room_data = room.dict(exclude_unset=True)
-    #     for key, value in room_data.items():
-    #         setattr(check_room, key, value)
-    #     try:
-    #         await self.session.commit()
-    #         return room_data
-    #     except Exception as e:
-    #         print(e)
-    #         await self.session.rollback()
-    #         raise e
+        teacher_data = teacher.dict(exclude_unset=True)
+        for key, value in teacher_data.items():
+            setattr(check_teacher, key, value)
+        try:
+            await self.session.commit()
+            return teacher_data
+        except Exception as e:
+            print(e)
+            await self.session.rollback()
+            raise e
 
     # async def delete_room_by_id(self, id: int) -> None:
     #     """

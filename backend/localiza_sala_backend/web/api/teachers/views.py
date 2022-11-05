@@ -2,6 +2,7 @@ from re import sub
 import os
 from typing import List, Union, Any
 from datetime import datetime
+from localiza_sala_backend.web.api.teachers.schema import TeachersModelUpdate
 from localiza_sala_backend.web.api.teachers.schema import TeacherModelView
 from localiza_sala_backend.web.api.users.schema import TokenPayload
 from localiza_sala_backend.db.models.teachers_model import TeachersModel
@@ -41,25 +42,25 @@ router = APIRouter()
 
 
 
-# @router.get("/get_room_by_id", status_code=200)
-# async def get_room_by_id(rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> RoomModelView:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+@router.get("/get_teacher_by_id", status_code=200)
+async def get_teacher_by_id(teachers_dao: TeachersDAO = Depends(), token: str = Depends(reuseable_oauth), teacher_id: int = 0) -> TeacherModelView:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
        
-#         token_data = TokenPayload(**payload)
+        token_data = TokenPayload(**payload)
     
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         room = await rooms_dao.get_room_by_id(room_id)
-#         return RoomModelView.from_orm(room)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        teacher = await teachers_dao.get_teacher_by_id(teacher_id)
+        return TeacherModelView.from_orm(teacher)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Professor não encontrado"})
 
 # @router.delete("/delete_room_by_id", status_code=200)
 # async def delete_room_by_id(rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> RoomModelView:
@@ -81,39 +82,40 @@ router = APIRouter()
 #         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
 #     return JSONResponse(status_code=200, content={"message": "Sala deletada com sucesso!"})
 
-# @router.put('/', status_code=200)
-# async def update_room(room_to_edit: RoomsModelUpdate, users_dao: UsersDAO = Depends(), rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth)):
-#     """
-#     Update user.
+@router.put('/', status_code=200)
+async def update_teacher(teacher_to_edit: TeachersModelUpdate, users_dao: UsersDAO = Depends(), teacher_dao: TeachersDAO = Depends(), token: str = Depends(reuseable_oauth)):
+    """
+    Update teacher.
 
-#     :param user: user to update.
-#     :param users_dao: DAO for users.
-#     :return: updated user.
-#     """
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
-#         token_data = TokenPayload(**payload)
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         user = await users_dao.get_user_by_email(token_data.sub)
-#         user_detail = UsersModelDTO.from_orm(user)
-#     except:
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
+    :param teacher: teacher to update.
+    :param teachers_dao: DAO for teachers.
+    :return: updated teacher.
+    """
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+        token_data = TokenPayload(**payload)
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        user = await users_dao.get_user_by_email(token_data.sub)
+        user_detail = UsersModelDTO.from_orm(user)
+    except:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Prtofessor não encontrado"})
 
-#     room_to_edit.dt_atualizacao = datetime.now()
-#     room_to_edit.atualizado_por = user_detail.id
-#     try:
-#         await rooms_dao.update_room(room_to_edit)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=500, content={"message": "Erro ao atualizar sala!", "error_detail": str(e)})
+    teacher_to_edit.dt_atualizacao = datetime.now()
+    teacher_to_edit.atualizado_por = user_detail.id
+
+    try:
+        await teacher_dao.update_teacher(teacher_to_edit)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=500, content={"message": "Erro ao atualizar professor!", "error_detail": str(e)})
    
-#     return JSONResponse(status_code=200, content={"message": "Sala atualizada com sucesso!"})
+    return JSONResponse(status_code=200, content={"message": "Professor atualizado com sucesso!"})
 
 # # @router.post('/login', status_code=200)
 # # async def login_user(form: OAuth2PasswordRequestForm = Depends(), users_dao: UsersDAO = Depends()):
