@@ -1,7 +1,7 @@
 Utilizar em [dbdiagram](dbdiagram.io)
 
 ```
-Table Salas {
+Table rooms {
   id int
   nome_sala str
   lotacao str
@@ -9,11 +9,11 @@ Table Salas {
   agendavel str
   dt_criacao datetime
   dt_modificacao datetime
-  criado_por int
-  atualizado_por int
+  criado_por int [ref: > users.id]
+  atualizado_por int [ref: > users.id]
 }
 
-Table Usuarios {
+Table users {
   id int
   nome str
   sobrenome str
@@ -25,7 +25,16 @@ Table Usuarios {
   dt_modificacao datetime
   criado_por datetime
   modificado_por datetime
-  senha str
   token_senha str
+}
+
+Table teachers {
+  id int
+  nome str
+  sobrenome str
+  email str
+  lotacao str
+  siafi int
+  user_id int [ref: > users.id]
 }
 ```
