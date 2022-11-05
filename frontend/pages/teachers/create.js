@@ -12,7 +12,6 @@ import App from 'next/app';
 export default function RoomsIndexPage() {
     const user_logado = useSelector((state) => state.user);
     const [visible, setVisible] = useState(false);
-    let [rooms, setRooms] = useState([]);
 
     const schema = Yup.object().shape({
         nome: Yup.string().min(2, 'Seu nome deve ter pelo menos 2 caracteres').required('Nome do professor é obrigatório'),

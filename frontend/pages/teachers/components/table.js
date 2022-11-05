@@ -111,7 +111,7 @@ export function TableSort({ data }) {
   };
 
   const handleDeleteRoom = async (id) => {
-    const response = await fetch('http://localhost:8000/api/rooms/delete_room_by_id?room_id=' + id, {
+    const response = await fetch('http://localhost:8000/api/teachers/delete_teacher_by_id?teacher_id=' + id, {
       method: 'DELETE',
       headers: {
           'Content-Type': 'application/json',
@@ -121,19 +121,19 @@ export function TableSort({ data }) {
     const data = await response.json();
     if(data.error){
       showNotification({
-        title: 'Erro ao deletar sala!',
+        title: 'Erro ao deletar professor!',
         message: data.error,
         color: 'red',
         position: 'br',
     });
     }else{
       showNotification({
-        title: 'Sala deletada com sucesso!',
-        message: 'Sala deletada com sucesso!',
+        title: 'Professor deletado com sucesso!',
+        message: 'Professor deletado com sucesso!',
         color: 'green',
         position: 'br',
     });
-    Router.push('/rooms');
+    Router.push('/teachers');
     }
   }
 
@@ -153,7 +153,7 @@ export function TableSort({ data }) {
             <Button size="xs" variant="primary" onClick={() => {
               Router.push({
                 pathname: '/teachers/edit',
-                query: { room_id: row.id },
+                query: { teacher_id: row.id },
               })
             }} >
               Editar
