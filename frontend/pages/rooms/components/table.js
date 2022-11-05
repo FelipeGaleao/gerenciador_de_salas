@@ -16,6 +16,9 @@ import {
   IconSelector, IconChevronDown, IconChevronUp, IconSearch,
 } from '@tabler/icons';
 import Router from 'next/router';
+import { showNotification } from '@mantine/notifications';
+import { useSelector, useDispatch } from "react-redux";
+
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -86,7 +89,9 @@ function sortData(
   );
 }
 
+
 export function TableSort({ data }) {
+  const user_logado = useSelector((state) => state.user);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState(null);
@@ -105,11 +110,37 @@ export function TableSort({ data }) {
     setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: value }));
   };
 
+  const handleDeleteRoom = async (id) => {
+    const response = await fetch('http://localhost:8000/api/rooms/delete_room_by_id?room_id=' + id, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + user_logado.access_token
+      },
+  });
+    const data = await response.json();
+    if(data.error){
+      showNotification({
+        title: 'Erro ao deletar sala!',
+        message: data.error,
+        color: 'red',
+        position: 'br',
+    });
+    }else{
+      showNotification({
+        title: 'Sala deletada com sucesso!',
+        message: 'Sala deletada com sucesso!',
+        color: 'green',
+        position: 'br',
+    });
+    Router.push('/rooms');
+    }
+  }
+
   const rows = sortedData.map((row) => (
     <tr key={row.id}>
       <td>{row.id}</td>
       <td>{row.nome_sala}</td>
-      <td>{row.observacao ? row.observacao : '-'}</td>
       <td>{row.lotacao}</td>
       <td>{row.agendavel ? 'Sim' : 'Não'}</td>
       <td>{row.criado_por}</td>
@@ -129,7 +160,7 @@ export function TableSort({ data }) {
             </Button>
           </Grid.Col>
           <Grid.Col>
-            <Button size="xs" color="red" onClick={() => { }}>
+            <Button size="xs" color="red" onClick={(e) => { handleDeleteRoom(row.id) }}>
               Excluir
             </Button>
           </Grid.Col>
@@ -167,13 +198,6 @@ export function TableSort({ data }) {
               onSort={() => setSorting('nome_sala')}
             >
               Nome da Sala
-            </Th>
-            <Th
-              sorted={sortBy === 'observacao'}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting('observacao')}
-            >
-              Observação
             </Th>
             <Th
               sorted={sortBy === 'lotacao'}
