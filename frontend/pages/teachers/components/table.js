@@ -152,7 +152,7 @@ export function TableSort({ data }) {
           <Grid.Col>
             <Button size="xs" variant="primary" onClick={() => {
               Router.push({
-                pathname: '/rooms/edit',
+                pathname: '/teachers/edit',
                 query: { room_id: row.id },
               })
             }} >

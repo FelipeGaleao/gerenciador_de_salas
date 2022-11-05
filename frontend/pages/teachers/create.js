@@ -30,7 +30,7 @@ export default function RoomsIndexPage() {
     const handleSubmit = async (values) => {
         setVisible((v) => !v);
 
-        const room_to_create = {
+        const teacherToCreate = {
             'nome': values.nome,
             'sobrenome': values.sobrenome,
             'siafi': values.siafi,
@@ -43,7 +43,7 @@ export default function RoomsIndexPage() {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + user_logado.access_token
             },
-            body: JSON.stringify(room_to_create)
+            body: JSON.stringify(teacherToCreate)
         });
         const data = await response.json();
         setVisible((v) => !v);
@@ -118,7 +118,7 @@ export default function RoomsIndexPage() {
                                 </Grid>
 
                                 <Group position="right" mt="xl">
-                                    <Button onClick={(e) => Router.push('/rooms/')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Voltar</Button>
+                                    <Button onClick={(e) => Router.push('/teachers/')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Voltar</Button>
                                     <Button type="submit">Cadastrar</Button>
                                 </Group>
                             </form>
