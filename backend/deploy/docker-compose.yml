@@ -23,7 +23,7 @@ services:
       LOCALIZA_SALA_JWT_ALGORITHM: HS256
       LOCALIZA_SALA_JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30
       LOCALIZA_SALA_JWT_REFRESH_TOKEN_EXPIRE_MINUTES: 43200 # 7 dias
-      
+
     ports:
       - "8000:8000"
     expose:
@@ -53,7 +53,7 @@ services:
       context: .
       dockerfile: ./deploy/Dockerfile
     restart: "no"
-    command: alembic upgrade head
+    command: alembic upgrade "head"
     environment:
       LOCALIZA_SALA_BACKEND_DB_HOST: localhost
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306

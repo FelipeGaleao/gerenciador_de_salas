@@ -25,4 +25,4 @@ RUN apt-get purge -y \
 COPY . /app/src/
 RUN poetry install
 
-CMD ["/usr/local/bin/python", "-m", "localiza_sala_backend"]
+CMD ["/usr/local/bin/python", "-m", "localiza_sala_backend", "--reload"]
