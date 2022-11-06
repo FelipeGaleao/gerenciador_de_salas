@@ -37,4 +37,17 @@ Table teachers {
   siafi int
   user_id int [ref: > users.id]
 }
+
+Table courses {
+  id int
+  nome str
+  lotacao_faculdade str
+  dt_criacao datetime
+  dt_modificacao datetime
+  curso str
+  periodo str
+  qtde_alunos_matriculados int 
+  criado_por int [ref: > users.id]
+  atualizado_por int [ref: > users.id]
+}
 ```
