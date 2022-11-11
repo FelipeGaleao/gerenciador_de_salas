@@ -32,7 +32,7 @@ class CoursesModelsDTO(BaseModel):
     qtde_alunos_matriculados: int = Field(..., example=10)
     criado_por: int = Field(None, example=1)
     atualizado_por: Union[int, None] = Field(None, example=1)
-    dt_criacao: datetime = Field(..., example=datetime.now())
+    dt_criacao: Union[datetime, None] = Field(None, example=datetime.now())
     dt_atualizacao: Union[datetime, None] = Field(None, example=datetime.now())
 
     class Config:
