@@ -64,20 +64,20 @@ class CoursesDAO:
         )
         return raw_courses.scalars().fetchall()
 
-    # async def get_teacher_by_id(self, id: int) -> Optional[TeachersModel]:
-    #     """
-    #     Retorna uma sala pelo id.
+    async def get_course_by_id(self, id: int) -> Optional[CoursesModel]:
+        """
+        Retorna uma disciplian pelo id.
 
-    #     :param id: id da sala.
-    #     :return: sala.
-    #     """
-    #     raw_user = await self.session.execute(
-    #         select(TeachersModel).where(TeachersModel.id == id),
-    #     )
-    #     try: 
-    #         return raw_user.scalars().one()
-    #     except:
-    #         return None
+        :param id: id da disciplina
+        :return: disciplina
+        """
+        raw_user = await self.session.execute(
+            select(CoursesModel).where(CoursesModel.id == id),
+        )
+        try: 
+            return raw_user.scalars().one()
+        except:
+            return None
 
     async def update_course(self, course: CoursesModel) -> None:
         """
@@ -104,18 +104,18 @@ class CoursesDAO:
             await self.session.rollback()
             raise e
 
-    # async def delete_teacher_by_id(self, id: int) -> None:
-    #     """
-    #     Deleta um professor pelo id
+    async def delete_course_by_id(self, id: int) -> None:
+        """
+        Deleta uma disciplina pelo id
 
-    #     :param id: id do professor.
-    #     """
-    #     raw_user = await self.session.execute(
-    #         select(TeachersModel).where(TeachersModel.id == id),
-    #     )
-    #     try: 
-    #         room = raw_user.scalars().one()
-    #         await self.session.delete(room)
-    #         await self.session.commit()
-    #     except:
-    #         raise Exception("Professor não foi encontrado.")
+        :param id: id da disciplina.
+        """
+        raw_user = await self.session.execute(
+            select(CoursesModel).where(CoursesModel.id == id),
+        )
+        try: 
+            course = raw_user.scalars().one()
+            await self.session.delete(course)
+            await self.session.commit()
+        except:
+            raise Exception("Disciplina não foi encontrada.")

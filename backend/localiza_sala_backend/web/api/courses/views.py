@@ -20,63 +20,46 @@ from pydantic import ValidationError
 router = APIRouter()
 
 
-# @router.get("/", response_model=List[DummyModelDTO])
-# async def get_dummy_models(
-#     limit: int = 10,
-#     offset: int = 0,
-#     dummy_dao: DummyDAO = Depends(),
-# ) -> List[DummyModel]:
-#     """
-#     Retrieve all dummy objects from the database.
 
-#     :param limit: limit of dummy objects, defaults to 10.
-#     :param offset: offset of dummy objects, defaults to 0.
-#     :param dummy_dao: DAO for dummy models.
-#     :return: list of dummy obbjects from database.
-#     """
-#     return await dummy_dao.get_all_dummies(limit=limit, offset=offset)
-
-
-
-# @router.get("/get_room_by_id", status_code=200)
-# async def get_room_by_id(rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> RoomModelView:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+@router.get("/get_course_by_id", status_code=200)
+async def get_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), course_id: int = 0) -> CoursesModelView:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
        
-#         token_data = TokenPayload(**payload)
+        token_data = TokenPayload(**payload)
     
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         room = await rooms_dao.get_room_by_id(room_id)
-#         return RoomModelView.from_orm(room)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        room = await courses_dao.get_course_by_id(course_id)
+        return CoursesModelView.from_orm(room)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Disciplina não encontrada"})
 
-# @router.delete("/delete_room_by_id", status_code=200)
-# async def delete_room_by_id(rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> RoomModelView:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+@router.delete("/delete_course_by_id", status_code=200)
+async def delete_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> CoursesModelView:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
        
-#         token_data = TokenPayload(**payload)
+        token_data = TokenPayload(**payload)
     
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         room = await rooms_dao.delete_room_by_id(room_id)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
-#     return JSONResponse(status_code=200, content={"message": "Sala deletada com sucesso!"})
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        await courses_dao.delete_course_by_id(room_id)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
+    return JSONResponse(status_code=200, content={"message": "Disciplina deletada com sucesso!"})
 
 @router.put('/', status_code=200)
 async def update_room(course_to_edit: CoursesModelUpdate, users_dao: UsersDAO = Depends(), courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth)):
