@@ -156,7 +156,7 @@ export function TableSort({ data }) {
             <Button size="xs" variant="primary" onClick={() => {
               Router.push({
                 pathname: '/courses/edit',
-                query: { course_id: course.id },
+                query: { course_id: row.id },
               })
             }} >
               Editar
