@@ -217,6 +217,13 @@ export function TableSort({ data }) {
               Faculdade
             </Th>
             <Th
+              sorted={sortBy === 'curso'}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting('curso')}
+            >
+              Curso
+            </Th>
+            <Th
               sorted={sortBy === 'periodo'}
               reversed={reverseSortDirection}
               onSort={() => setSorting('periodo')}
