@@ -42,7 +42,7 @@ async def get_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Dep
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Disciplina não encontrada"})
 
 @router.delete("/delete_course_by_id", status_code=200)
-async def delete_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), room_id: int = 0) -> CoursesModelView:
+async def delete_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), course_id: int = 0) -> CoursesModelView:
     try:
         payload = jwt.decode(
             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
@@ -55,7 +55,7 @@ async def delete_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = 
         print(jwt.JWTError)
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
     try:
-        await courses_dao.delete_course_by_id(room_id)
+        await courses_dao.delete_course_by_id(course_id)
     except Exception as e:
         print(e)
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
