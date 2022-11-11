@@ -2,6 +2,8 @@ from re import sub
 import os
 from typing import List, Union, Any
 from datetime import datetime
+from localiza_sala_backend.web.api.courses.schema import CoursesModelUpdate
+from localiza_sala_backend.web.api.courses.schema import CoursesModelView
 from localiza_sala_backend.web.api.rooms.schema import RoomsModelUpdate
 from fastapi import APIRouter, status
 from fastapi.param_functions import Depends
@@ -76,77 +78,60 @@ router = APIRouter()
 #         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
 #     return JSONResponse(status_code=200, content={"message": "Sala deletada com sucesso!"})
 
-# @router.put('/', status_code=200)
-# async def update_room(room_to_edit: RoomsModelUpdate, users_dao: UsersDAO = Depends(), rooms_dao: RoomsDAO = Depends(), token: str = Depends(reuseable_oauth)):
-#     """
-#     Update user.
+@router.put('/', status_code=200)
+async def update_room(course_to_edit: CoursesModelUpdate, users_dao: UsersDAO = Depends(), courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth)):
+    """Método para atualizar disciplinas cadastradas no banco de dados.
 
-#     :param user: user to update.
-#     :param users_dao: DAO for users.
-#     :return: updated user.
-#     """
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
-#         token_data = TokenPayload(**payload)
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         user = await users_dao.get_user_by_email(token_data.sub)
-#         user_detail = UsersModelDTO.from_orm(user)
-#     except:
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
+    Args:
+        course_to_edit (CoursesModelUpdate): Objeto com os dados da disciplina a ser atualizada.
+        courses_dao (UsersDAO, optional): DAO para disciplinas. Defaults to Depends().
+        rooms_dao (CoursesDAO, optional): DAO para salas. Defaults to Depends().
+        token (str, optional): Token de autenticação. Defaults to Depends(reuseable_oauth).
 
-#     room_to_edit.dt_atualizacao = datetime.now()
-#     room_to_edit.atualizado_por = user_detail.id
-#     try:
-#         await rooms_dao.update_room(room_to_edit)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=500, content={"message": "Erro ao atualizar sala!", "error_detail": str(e)})
+    """
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+        token_data = TokenPayload(**payload)
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        user = await users_dao.get_user_by_email(token_data.sub)
+        user_detail = UsersModelDTO.from_orm(user)
+    except:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
+
+    course_to_edit.dt_atualizacao = datetime.now()
+    course_to_edit.atualizado_por = user_detail.id
+    try:
+        await courses_dao.update_course(course_to_edit)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=500, content={"message": "Erro ao atualizar disciplina!", "error_detail": str(e)})
    
-#     return JSONResponse(status_code=200, content={"message": "Sala atualizada com sucesso!"})
+    return JSONResponse(status_code=200, content={"message": "Disciplina atualizada com sucesso!"})
 
-# # @router.post('/login', status_code=200)
-# # async def login_user(form: OAuth2PasswordRequestForm = Depends(), users_dao: UsersDAO = Depends()):
-# #     """
-# #     Login user.
+@router.get('/', response_model=List[CoursesModelView])
 
-# #     :param user: dados para login.
-# #     :param users_dao: DAO for users.
-# #     :return: logged user.
-# #     """
-# #     user = UsersModel()
-# #     user.email = form.username
-# #     user.senha = form.password
+async def get_all_courses(
+    limit: int = 25,
+    offset: int = 0,
+    courses_dao: CoursesDAO = Depends(),
+) -> List[CoursesModelView]:
+    """Método para retornar todos os disciplinas cadastrados no banco de dados.
 
-# #     check_user = await users_dao.get_user_by_email(user.email)
-    
-# #     if check_user is None:
-# #         return JSONResponse(status_code=400, content={"message": "Usuário não encontrado!"})
-    
-# #     if not hash_service.verify_password(user.senha, check_user.senha):
-# #         return JSONResponse(status_code=400, content={"message": "Senha incorreta!"})
-    
-# #     access_token = hash_service.create_access_token(subject = user.email)
-# #     refresh_token = hash_service.create_refresh_token(subject = user.email)
+    Args: \n
+        limit (int, optional): Limite de disciplinas a serem retornados. Defaults to 25. \n
+        offset (int, optional): Deslocamento de disciplinas a serem retornados. Defaults to 0. \n
+        courses_dao (CoursesDAO, optional): Camada de acesso a dados de disciplinas. \n
 
-# #     return JSONResponse(status_code=200, 
-# #      content={"message": "Usuário logado com sucesso!",
-# #      "access_token": access_token,
-# #      "refresh_token": refresh_token,
-# #      "user_detail": UsersModelDTO.from_orm(check_user).json()})
-
-# @router.get('/', response_model=List[RoomModelView])
-# async def get_rooms(
-#     limit: int = 25,
-#     offset: int = 0,
-#     rooms_dao: RoomsDAO = Depends(),
-# ) -> List[RoomModelView]:
-#     return await rooms_dao.get_all_rooms(limit=limit, offset=offset)
+    Returns: \n
+        List[CoursesModelView]: _description_ \n
+    """
+    return await courses_dao.get_all_courses(limit=limit, offset=offset)
 
 
 @router.post("/", status_code=200)
@@ -158,9 +143,9 @@ async def create_new_course(
 ) -> None:
     """Método para criar uma nova disciplina.
 
-    Args: 
-        new_course (CoursesModelsDTO): Objeto com os dados da disciplina.
-        courses_dao (CoursesDAO): DAO para disciplinas.
+    Args:  \n
+        new_course (CoursesModelsDTO): Objeto com os dados da disciplina. \n
+        courses_dao (CoursesDAO): DAO para disciplinas. \n
     """
 
     try:
@@ -189,6 +174,6 @@ async def create_new_course(
         await courses_dao.create_course(**new_course.dict())
     except Exception as e:
         print(e)
-        return JSONResponse(status_code=400, content={"message": "Erro ao cadastrar um professor."})
+        return JSONResponse(status_code=400, content={"message": "Erro ao cadastrar uma disciplina."})
     
-    return JSONResponse(status_code=200, content={"message": "Professor cadastrado com sucesso."})
+    return JSONResponse(status_code=200, content={"message": "Disciplina cadastrada com sucesso."})

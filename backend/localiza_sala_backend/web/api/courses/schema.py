@@ -38,3 +38,24 @@ class CoursesModelsDTO(BaseModel):
     class Config:
         orm_mode = True
     
+class CoursesModelUpdate(BaseModel):
+    """
+    DTO for Room Model
+
+    Valores retornados ao acessar usuários.
+    """
+    course_id: int = Field(..., example=1)
+    nome: Union[str, None] = Field(None, example="Estrutura de Dados I")
+    teacher_id: Union[int, None] = Field(None, example=1)
+    lotacao_faculdade: Union[str, None] = Field(None, example="Faculdade de Computacao")
+    curso: Union[str, None] = Field(None, example="Ciencia da Computacao")
+    periodo: Union[str, None] = Field(None, example="2021.1 - Vespertino")
+    qtde_alunos_matriculados: Union[int, None] = Field(None, example=10)
+    criado_por: int = Field(None, example=1)
+    atualizado_por: Union[int, None] = Field(None, example=1)
+    dt_criacao: Union[datetime, None] = Field(None, example=datetime.now())
+    dt_atualizacao: Union[datetime, None] = Field(None, example=datetime.now())
+
+
+    class Config:
+        orm_mode = True

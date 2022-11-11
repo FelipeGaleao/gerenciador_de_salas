@@ -51,18 +51,18 @@ class CoursesDAO:
     #         await self.session.rollback()
     #         raise e
 
-    # async def get_all_teachers(self, limit: int = 25, offset: int = 0) -> List[TeachersModel]:
-    #     """
-    #     Retorna todos os professores do banco de dados.
+    async def get_all_courses(self, limit: int = 25, offset: int = 0) -> List[CoursesModel]:
+        """
+        Retorna todas os disciplinas do banco de dados.
 
-    #     :param limit: limite de professores a serem retornadas.
-    #     :param offset: offset de professores a serem retornadas.
-    #     :return: lista de professores.
-    #     """
-    #     raw_users = await self.session.execute(
-    #         select(TeachersModel).limit(limit).offset(offset),
-    #     )
-    #     return raw_users.scalars().fetchall()
+        :param limit: limite de disciplinas a serem retornadas.
+        :param offset: offset de disciplinas a serem retornadas.
+        :return: lista de professores.
+        """
+        raw_courses = await self.session.execute(
+            select(CoursesModel).limit(limit).offset(offset),
+        )
+        return raw_courses.scalars().fetchall()
 
     # async def get_teacher_by_id(self, id: int) -> Optional[TeachersModel]:
     #     """
@@ -79,30 +79,30 @@ class CoursesDAO:
     #     except:
     #         return None
 
-    # async def update_teacher(self, teacher: TeachersModel) -> None:
-    #     """
-    #     Atualiza um professor.
-    #     """
+    async def update_course(self, course: CoursesModel) -> None:
+        """
+        Atualiza uma disciplina.
+        """
         
-    #     check_teacher = await self.session.execute(
-    #                 select(TeachersModel).where(TeachersModel.id == teacher.teacher_id),
-    #             )
+        check_course = await self.session.execute(
+                    select(CoursesModel).where(CoursesModel.id == course.course_id),
+                )
 
-    #     check_teacher = check_teacher.scalars().first()
+        check_course = check_course.scalars().first()
         
-    #     if not check_teacher:
-    #         raise Exception("Sala não foi encontrada.")
+        if not check_course:
+            raise Exception("Disciplina não foi encontrada.")
 
-    #     teacher_data = teacher.dict(exclude_unset=True)
-    #     for key, value in teacher_data.items():
-    #         setattr(check_teacher, key, value)
-    #     try:
-    #         await self.session.commit()
-    #         return teacher_data
-    #     except Exception as e:
-    #         print(e)
-    #         await self.session.rollback()
-    #         raise e
+        course_data = course.dict(exclude_unset=True)
+        for key, value in course_data.items():
+            setattr(check_course, key, value)
+        try:
+            await self.session.commit()
+            return course_data
+        except Exception as e:
+            print(e)
+            await self.session.rollback()
+            raise e
 
     # async def delete_teacher_by_id(self, id: int) -> None:
     #     """
