@@ -36,6 +36,10 @@ Table teachers {
   lotacao str
   siafi int
   user_id int [ref: > users.id]
+  criado_por int [ref: > users.id]
+  atualizado_por int [ref: > users.id]
+  dt_criacao datetime
+  dt_modificacao datetime
 }
 
 Table courses {
