@@ -18,6 +18,7 @@ from typing import Union
 
 class EventsModelView(BaseModel):
     """Model para Eventos. """
+    id: Union[None, int] = Field(None, example=1)
     nome: str = Field(..., example="Estrutura de Dados I")
     descricao: Union[str, None] = Field(None, example="Aula de Estrutura de Dados I")
     quantidade_de_pessoas: int = Field(..., example=10)

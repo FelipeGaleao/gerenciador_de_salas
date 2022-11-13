@@ -47,27 +47,6 @@ class EventsDAO:
             raise e
 
 
-    # async def create_room(self, nome_sala: str, lotacao: int, observacao: str, agendavel: bool, dt_criacao: datetime, dt_atualizacao: datetime, criado_por: int) -> None:
-    #     """
-    #     Adiciona uma sala no banco de dados.
-
-    #     :param nome_sala: nome da sala.
-    #     :param lotacao: lotação da sala.
-    #     :param observacao: observação da sala.
-    #     :param agendavel: se a sala é agendável.
-    #     :param dt_criacao: data de criação da sala.
-    #     :param dt_atualizacao: data de atualização da sala.
-    #     :param criado_por: usuário que criou a sala.
-    #     :param atualizado_por: usuário que atualizou a sala.
-    #     """
-    #     try:
-    #         self.session.add(RoomsModel(nome_sala=nome_sala, lotacao=lotacao, observacao=observacao, agendavel=agendavel, dt_criacao=dt_criacao, dt_atualizacao=dt_atualizacao, criado_por=criado_por))
-    #         await self.session.commit()
-    #     except Exception as e:
-    #         print(e)
-    #         await self.session.rollback()
-    #         raise e
-
     async def get_all_events(self, limit: int = 25, offset: int = 0) -> List[EventsModel]:
         """
         Retorna todas os eventos do banco de dados.
@@ -81,20 +60,20 @@ class EventsDAO:
         )
         return raw_courses.scalars().fetchall()
 
-    # async def get_course_by_id(self, id: int) -> Optional[CoursesModel]:
-    #     """
-    #     Retorna uma disciplian pelo id.
+    async def get_event_by_id(self, id: int) -> Optional[EventsModel]:
+        """
+        Retorna um evento pelo id 
 
-    #     :param id: id da disciplina
-    #     :return: disciplina
-    #     """
-    #     raw_user = await self.session.execute(
-    #         select(CoursesModel).where(CoursesModel.id == id),
-    #     )
-    #     try: 
-    #         return raw_user.scalars().one()
-    #     except:
-    #         return None
+        :param id: id do evento
+        :return: evento
+        """
+        raw_user = await self.session.execute(
+            select(EventsModel).where(EventsModel.id == id),
+        )
+        try: 
+            return raw_user.scalars().one()
+        except:
+            return None
 
     async def update_event(self, event: EventsModel) -> None:
         """
@@ -121,18 +100,18 @@ class EventsDAO:
             await self.session.rollback()
             raise e
 
-    # async def delete_course_by_id(self, id: int) -> None:
-    #     """
-    #     Deleta uma disciplina pelo id
+    async def delete_event_by_id(self, id: int) -> None:
+        """
+        Deleta um evento pelo id
 
-    #     :param id: id da disciplina.
-    #     """
-    #     raw_user = await self.session.execute(
-    #         select(CoursesModel).where(CoursesModel.id == id),
-    #     )
-    #     try: 
-    #         course = raw_user.scalars().one()
-    #         await self.session.delete(course)
-    #         await self.session.commit()
-    #     except:
-    #         raise Exception("Disciplina não foi encontrada.")
+        :param id: id da evento.
+        """
+        raw_user = await self.session.execute(
+            select(EventsModel).where(EventsModel.id == id),
+        )
+        try: 
+            event = raw_user.scalars().one()
+            await self.session.delete(event)
+            await self.session.commit()
+        except:
+            raise Exception("Evento não foi encontrado.")

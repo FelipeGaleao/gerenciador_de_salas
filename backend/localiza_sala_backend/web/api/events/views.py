@@ -20,45 +20,45 @@ router = APIRouter()
 
 
 
-# @router.get("/get_course_by_id", status_code=200)
-# async def get_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), course_id: int = 0) -> CoursesModelView:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+@router.get("/get_event_by_id", status_code=200)
+async def get_event_by_id(events_dao: EventsDAO = Depends(), token: str = Depends(reuseable_oauth), event_id: int = 0) -> EventsModelView:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
        
-#         token_data = TokenPayload(**payload)
+        token_data = TokenPayload(**payload)
     
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         room = await courses_dao.get_course_by_id(course_id)
-#         return CoursesModelView.from_orm(room)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Disciplina não encontrada"})
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        event = await events_dao.get_event_by_id(event_id)
+        return EventsModelView.from_orm(event)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Evento não encontrado"})
 
-# @router.delete("/delete_course_by_id", status_code=200)
-# async def delete_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), course_id: int = 0) -> CoursesModelView:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
+@router.delete("/delete_event_by_id", status_code=200)
+async def delete_event_by_id(events_dao: EventsDAO = Depends(), token: str = Depends(reuseable_oauth), event_id: int = 0) -> EventsModelView:
+    try:
+        payload = jwt.decode(
+            token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
        
-#         token_data = TokenPayload(**payload)
+        token_data = TokenPayload(**payload)
     
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         await courses_dao.delete_course_by_id(course_id)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Sala não encontrada"})
-#     return JSONResponse(status_code=200, content={"message": "Disciplina deletada com sucesso!"})
+        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+            return JSONResponse(status_code=401, content={"message": "Token expirado"})
+    except (jwt.JWTError, ValidationError):
+        print(jwt.JWTError)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
+    try:
+        await events_dao.delete_event_by_id(event_id)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Evento não encontrado"})
+    return JSONResponse(status_code=200, content={"message": "Evento deletado com sucesso!"})
 
 @router.put('/', status_code=200)
 async def update_event(event_to_edit: EventsModelUpdate, users_dao: UsersDAO = Depends(), events_dao: EventsDAO = Depends(), token: str = Depends(reuseable_oauth)):
