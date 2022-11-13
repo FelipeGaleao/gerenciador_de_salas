@@ -58,6 +58,7 @@ Table courses {
 Table events {
   id int
   nome str
+  descricao str
   quantidade_de_pessoas int
   nome_curso str
   nome_faculdade str
