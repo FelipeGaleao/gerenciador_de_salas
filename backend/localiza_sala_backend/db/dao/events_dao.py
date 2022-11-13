@@ -96,30 +96,30 @@ class EventsDAO:
     #     except:
     #         return None
 
-    # async def update_course(self, course: CoursesModel) -> None:
-    #     """
-    #     Atualiza uma disciplina.
-    #     """
+    async def update_event(self, event: EventsModel) -> None:
+        """
+        Atualiza um evento.
+        """
         
-    #     check_course = await self.session.execute(
-    #                 select(CoursesModel).where(CoursesModel.id == course.course_id),
-    #             )
+        check_event = await self.session.execute(
+                    select(EventsModel).where(EventsModel.id == event.event_id),
+                )
 
-    #     check_course = check_course.scalars().first()
+        check_event = check_event.scalars().first()
         
-    #     if not check_course:
-    #         raise Exception("Disciplina não foi encontrada.")
+        if not check_event:
+            raise Exception("Evento não foi encontrada.")
 
-    #     course_data = course.dict(exclude_unset=True)
-    #     for key, value in course_data.items():
-    #         setattr(check_course, key, value)
-    #     try:
-    #         await self.session.commit()
-    #         return course_data
-    #     except Exception as e:
-    #         print(e)
-    #         await self.session.rollback()
-    #         raise e
+        event_data = event.dict(exclude_unset=True)
+        for key, value in event_data.items():
+            setattr(check_event, key, value)
+        try:
+            await self.session.commit()
+            return event_data
+        except Exception as e:
+            print(e)
+            await self.session.rollback()
+            raise e
 
     # async def delete_course_by_id(self, id: int) -> None:
     #     """
