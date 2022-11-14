@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import React from 'react';
 import App from 'next/app';
 import axios from 'axios';
-import { TableSort } from '../events/components/table';
+import TableSort from '../events/components/table';
 
 export default function RoomsIndexPage() {
   const user_logado = useSelector((state) => state.user);
