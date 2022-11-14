@@ -1,2 +1,2 @@
-backend/python_env/*
+./backend/python_env/*
 node_modules/*

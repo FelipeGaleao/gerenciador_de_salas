@@ -132,6 +132,7 @@ export default function RoomsEditPage() {
                 color: 'teal',
                 position: 'br',
             });
+            console.log("teste");
             Router.push('/events');
         }
     }
