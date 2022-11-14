@@ -131,6 +131,8 @@ const data = {
     { title: 'Agendamentos', href: '/agendamento' },
     { title: 'Salas', href: '/rooms' },
     { title: 'Professores', href: '/teachers' },
+    { title: 'Disciplinas', href: '/courses' },
+    { title: 'Eventos', href: '/events' },
   ],
 };
 
