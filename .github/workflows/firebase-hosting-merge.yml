@@ -10,6 +10,8 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Install dependences about NextJS
+      - run: cd frontend && npm install
       - uses: actions/checkout@v2
       - run: cd frontend && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
