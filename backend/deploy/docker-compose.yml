@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./deploy/Dockerfile
-    restart: always
+    restart: on-failure[:3]	
     env_file:
     - ./deploy/.env
     depends_on:
@@ -31,7 +31,7 @@ services:
   db:
     image: mysql
     hostname: localiza_sala_backend-db
-    restart: always
+    restart: on-failure[:3]	
     environment:
       MYSQL_ROOT_USER: "localiza_sala_backend"
       MYSQL_ROOT_PASSWORD: "localiza_sala_backend"
@@ -52,7 +52,7 @@ services:
     build:
       context: .
       dockerfile: ./deploy/Dockerfile
-    restart: "no"
+    restart: on-failure[:3]	
     command: alembic upgrade "head"
     environment:
       LOCALIZA_SALA_BACKEND_DB_HOST: localhost

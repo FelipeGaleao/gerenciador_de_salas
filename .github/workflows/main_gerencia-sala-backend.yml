@@ -1,0 +1,52 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - gerencia-sala-backend
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to registry
+      uses: docker/login-action@v1
+      with:
+        registry: https://index.docker.io/v1/
+        username: ${{ secrets.AzureAppService_ContainerUsername_e6a5d7482dd944a3b75b43e501ef913a }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_f7be780e94954fd18a41a6a9ef481949 }}
+
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v2
+      with:
+        context: ./backend
+        push: true
+        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_e6a5d7482dd944a3b75b43e501ef913a }}/gerencia_sala_backend:${{ github.sha }}
+        file: ./backend/deploy/Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'gerencia-sala-backend'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_d497743d06e5468fa45aa77e8547e417 }}
+        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_e6a5d7482dd944a3b75b43e501ef913a }}/gerencia_sala_backend:${{ github.sha }}'
