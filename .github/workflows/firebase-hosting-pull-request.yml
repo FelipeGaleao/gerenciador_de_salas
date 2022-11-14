@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - uses: actions/checkout@v2
+
       - name: Install dependences about NextJS
         run: cd frontend && npm install
 
-      - uses: actions/checkout@v2
-     
       - name: Build frontend  
         run: cd frontend && npm run build
 
