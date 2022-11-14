@@ -32,7 +32,7 @@ jobs:
         context: ./backend
         push: true
         tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_e6a5d7482dd944a3b75b43e501ef913a }}/gerencia_sala_backend:${{ github.sha }}
-        file: ./deploy/Dockerfile
+        file: ./backend/deploy/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
