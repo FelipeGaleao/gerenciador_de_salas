@@ -11,11 +11,11 @@ jobs:
 
       - uses: actions/checkout@v2
       
-      - name: Create env file
+      - name: Create frontend env file
         run: |
-          touch .env
-          echo NEXT_PUBLIC_BACKEND_API_URL=${{ secrets.NEXT_PUBLIC_BACKEND_API_URL }} >> .env
-          cat .env
+          touch ./frontend/.env.local
+          echo NEXT_PUBLIC_BACKEND_API_URL=${{ secrets.NEXT_PUBLIC_BACKEND_API_URL }} >> ./frontend/.env.local
+          cat ./frontend/.env.local
 
       - name: Install dependences about NextJS
         run: cd frontend && npm install
