@@ -1,6 +1,9 @@
 // next.config.js
 
 module.exports = {
+  images: {
+    unoptimized: true,
+  },
     webpackDevMiddleware: config => {
       config.watchOptions = {
         poll: 10000,

@@ -30,7 +30,7 @@ export default function RoomsIndexPage() {
     });
 
     const getTeachers = async () => {
-        const response = await fetch('http://localhost:8000/api/teachers', {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/teachers', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export default function RoomsIndexPage() {
             'teacher_id': values.teacher_id,
         };
 
-        const response = await fetch('http://localhost:8000/api/courses', {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/courses', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

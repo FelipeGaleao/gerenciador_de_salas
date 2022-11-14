@@ -29,7 +29,7 @@ export default function RoomsEditPage() {
     });
 
     const getRoomById = async (room_id) => {
-        const response = await fetch('http://localhost:8000/api/rooms/get_room_by_id?room_id=' + room_id, {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/rooms/get_room_by_id?room_id=' + room_id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export default function RoomsEditPage() {
             'room_id': room_id,
         };
 
-        const response = await fetch('http://localhost:8000/api/rooms', {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/rooms', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

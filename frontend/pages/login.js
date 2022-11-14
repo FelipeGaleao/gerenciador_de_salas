@@ -61,7 +61,7 @@ const handleSubmit = async (values) => {
 
 
   try{
-    const response = await fetch('http://localhost:8000/api/users/login', {
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/users/login', {
       method: 'POST',
       body: formData
     });

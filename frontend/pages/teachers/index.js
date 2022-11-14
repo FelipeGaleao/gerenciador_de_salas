@@ -16,7 +16,7 @@ export default function RoomsIndexPage() {
   let [teachers, setTeachers] = useState([]);
   const getTeachers = async () => {
     try {
-      await axios.get('http://localhost:8000/api/teachers', {
+      await axios.get(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/teachers', {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
