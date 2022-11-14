@@ -16,7 +16,7 @@ function App({ Component, pageProps, ...rest }) {
       <Head>
         <title>Localiza Sala | UFMS</title>
         <link rel="shortcut icon" href="/favicon.svg" />
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
 
         <meta
           name="viewport"
