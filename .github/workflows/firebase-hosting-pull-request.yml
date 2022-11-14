@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependences about NextJS
-      - run: cd frontend && npm install
+        run: cd frontend && npm install
       - uses: actions/checkout@v2
-      - run: cd frontend && npm run build
+        run: cd frontend && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GERENCIA_SALA }}'
-          channelId: live
+          channelId: preview
           projectId: gerencia-sala
