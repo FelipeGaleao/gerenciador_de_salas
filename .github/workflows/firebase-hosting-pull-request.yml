@@ -14,7 +14,7 @@ jobs:
       - name: Create frontend env file
         run: |
           touch ./frontend/.env.local
-          echo NEXT_PUBLIC_BACKEND_API_URL=${{ secrets.NEXT_PUBLIC_BACKEND_API_URL }} >> .env
+          echo NEXT_PUBLIC_BACKEND_API_URL=${{ secrets.NEXT_PUBLIC_BACKEND_API_URL }} >> .env.local
           cat ./frontend/.env.local
 
       - name: Install dependences about NextJS
