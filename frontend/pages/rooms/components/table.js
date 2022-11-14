@@ -90,7 +90,7 @@ function sortData(
 }
 
 
-export function TableSort({ data }) {
+export default function TableSort({ data }) {
   const user_logado = useSelector((state) => state.user);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
