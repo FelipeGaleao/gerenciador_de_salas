@@ -16,7 +16,7 @@ export default function RoomsIndexPage() {
   let [events, setEvents] = useState([]);
   const getCourses = async () => {
     try {
-      await axios.get('http://localhost:8000/api/events', {
+      await axios.get(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/events', {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

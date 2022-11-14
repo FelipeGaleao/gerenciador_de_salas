@@ -16,7 +16,7 @@ export default function RoomsIndexPage() {
   let [rooms, setRooms] = useState([]);
   const getRooms = async () => {
     try {
-      await axios.get('http://localhost:8000/api/rooms', {
+      await axios.get(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/rooms', {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

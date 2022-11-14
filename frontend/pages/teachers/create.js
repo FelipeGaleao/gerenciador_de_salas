@@ -36,7 +36,7 @@ export default function RoomsIndexPage() {
             'lotacao': values.lotacao,
         };
 
-        const response = await fetch('http://localhost:8000/api/teachers', {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/teachers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

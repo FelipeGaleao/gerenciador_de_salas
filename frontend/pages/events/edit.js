@@ -40,7 +40,7 @@ export default function RoomsEditPage() {
     });
 
     const getEventById = async (event_id) => {
-        const response = await fetch('http://localhost:8000/api/events/get_event_by_id?event_id=' + event_id, {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/events/get_event_by_id?event_id=' + event_id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export default function RoomsEditPage() {
     }
 
     const getTeachers = async () => {
-        const response = await fetch('http://localhost:8000/api/teachers', {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/teachers', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export default function RoomsEditPage() {
             'dt_fim_evento': values.dt_fim_evento,
         };
 
-        const response = await fetch('http://localhost:8000/api/events', {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/events', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
