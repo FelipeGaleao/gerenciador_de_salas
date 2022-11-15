@@ -32,11 +32,12 @@ class ReservationModelInput(BaseModel):
     dt_modificacao: datetime = Field(..., example="2021-01-01 00:00:00")
     criado_por: int = Field(..., example=1)
     atualizado_por: int = Field(..., example=1)
-    teacher_id: int = Field(..., example=1)
-    room_id: int = Field(..., example=1)
-    event_id: int = Field(..., example=1)
-    course_id: int = Field(..., example=1)
-    user_id: int = Field(..., example=1)
+    teacher_id: Union[int, None] = Field(None, example=1)
+    event_id: Union[int, None] = Field(None, example=1)
+    room_id: Union[int, None] = Field(None, example=1)
+    event_id: Union[int, None] = Field(None, example=1)
+    course_id: Union[int, None] = Field(None, example=1)
+    user_id: Union[int, None] = Field(None, example=1)
 
     class Config:
         orm_mode = True
@@ -51,11 +52,11 @@ class ReservationModelUpdate(BaseModel):
     dt_modificacao: datetime = Field(..., example="2021-01-01 00:00:00")
     criado_por: int = Field(..., example=1)
     atualizado_por: int = Field(..., example=1)
-    teacher_id: int = Field(..., example=1)
-    room_id: int = Field(..., example=1)
-    event_id: int = Field(..., example=1)
-    course_id: int = Field(..., example=1)
-    user_id: int = Field(..., example=1)
+    teacher_id: Union[int, None] = Field(None, example=1)
+    room_id: Union[int, None] = Field(None, example=1)
+    event_id: Union[int, None] = Field(None, example=1)
+    course_id: Union[int, None] = Field(None, example=1)
+    user_id: Union[int, None] = Field(None, example=1)
 
     class Config:
         orm_mode = True
