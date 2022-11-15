@@ -19,25 +19,14 @@ router = APIRouter()
 
 
 
-# @router.get("/get_course_by_id", status_code=200)
-# async def get_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), course_id: int = 0) -> CoursesModelView:
-#     try:
-#         payload = jwt.decode(
-#             token, os.environ['JWT_SECRET_KEY'], algorithms=[os.environ['JWT_ALGORITHM']])
-       
-#         token_data = TokenPayload(**payload)
-    
-#         if datetime.fromtimestamp(token_data.exp) < datetime.now():
-#             return JSONResponse(status_code=401, content={"message": "Token expirado"})
-#     except (jwt.JWTError, ValidationError):
-#         print(jwt.JWTError)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Token inválido"})
-#     try:
-#         room = await courses_dao.get_course_by_id(course_id)
-#         return CoursesModelView.from_orm(room)
-#     except Exception as e:
-#         print(e)
-#         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Disciplina não encontrada"})
+@router.get("/get_reservation_by_id", status_code=200)
+async def get_reservation_by_id(reservations_dao: ReservationsDAO = Depends(), reservation_id: int = 0) -> ReservationModelView:
+    try:
+        reservation = await reservations_dao.get_reservation_by_id(reservation_id)
+        return ReservationModelView.from_orm(reservation)
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Reserva não encontrada"})
 
 # @router.delete("/delete_course_by_id", status_code=200)
 # async def delete_course_by_id(courses_dao: CoursesDAO = Depends(), token: str = Depends(reuseable_oauth), course_id: int = 0) -> CoursesModelView:

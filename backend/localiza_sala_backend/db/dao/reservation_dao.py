@@ -65,20 +65,20 @@ class ReservationsDAO:
             select(ReservationsModel).limit(limit).offset(offset),
         )
         return raw_reservations.scalars().fetchall()
-    # async def get_room_by_id(self, id: int) -> Optional[RoomsModel]:
-    #     """
-    #     Retorna uma sala pelo id.
+    async def get_reservation_by_id(self, id: int) -> Optional[ReservationsModel]:
+        """
+        Retorna uma reserva pelo id.
 
-    #     :param id: id da sala.
-    #     :return: sala.
-    #     """
-    #     raw_user = await self.session.execute(
-    #         select(RoomsModel).where(RoomsModel.id == id),
-    #     )
-    #     try: 
-    #         return raw_user.scalars().one()
-    #     except:
-    #         return None
+        :param id: id da reserva.
+        :return: reserva.
+        """
+        raw_user = await self.session.execute(
+            select(ReservationsModel).where(ReservationsModel.id == id),
+        )
+        try: 
+            return raw_user.scalars().one()
+        except:
+            raise Exception("Reserva não encontrada")
 
     # async def update_room(self, room: RoomsModel) -> None:
     #     """
