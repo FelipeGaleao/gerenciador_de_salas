@@ -9,14 +9,14 @@ import { useSelector, useDispatch } from "react-redux";
 import React from 'react';
 import App from 'next/app';
 import axios from 'axios';
-import { TableSort } from '../courses/components/table';
+import TableSort from '../courses/components/table';
 
 export default function RoomsIndexPage() {
   const user_logado = useSelector((state) => state.user);
   let [teachers, setTeachers] = useState([]);
   const getCourses = async () => {
     try {
-      await axios.get('http://localhost:8000/api/courses', {
+      await axios.get(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/courses', {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

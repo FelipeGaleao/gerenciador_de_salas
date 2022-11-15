@@ -90,7 +90,7 @@ function sortData(
 }
 
 
-export function TableSort({ data }) {
+export default function TableSort({ data }) {
   const user_logado = useSelector((state) => state.user);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
@@ -111,7 +111,7 @@ export function TableSort({ data }) {
   };
 
   const handleDeleteRoom = async (id) => {
-    const response = await fetch('http://localhost:8000/api/rooms/delete_room_by_id?room_id=' + id, {
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/rooms/delete_room_by_id?room_id=' + id, {
       method: 'DELETE',
       headers: {
           'Content-Type': 'application/json',
