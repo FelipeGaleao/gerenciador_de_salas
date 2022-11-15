@@ -1,3 +1,4 @@
 ./backend/python_env/*
 node_modules/*
 frontend/.firebase/*
+frontend/.firebase/*

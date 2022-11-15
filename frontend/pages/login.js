@@ -112,7 +112,7 @@ export default function SignupPage() {
 
             <Grid>
               <LoadingOverlay visible={visible} overlayBlur={1.5} />
-              <Grid.Col span={6}>
+              <Grid.Col md={6}>
                 <TextInput
                   label="Email"
                   placeholder="Digite seu email"
@@ -120,7 +120,7 @@ export default function SignupPage() {
                   {...form.getInputProps('email')}
                 />
               </Grid.Col>
-              <Grid.Col span={6}>
+              <Grid.Col md={6}>
                 <TextInput
                   label="Senha"
                   placeholder="Digite sua senha"
@@ -131,9 +131,13 @@ export default function SignupPage() {
               </Grid.Col>
             </Grid>
 
-            <Group position="right" mt="xl">
-              <Button onClick={(e) => Router.push('/signup')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Não tenho conta</Button>
-              <Button type="submit">Entrar</Button>
+            <Group position="center" mt="xl">
+              <Grid grow>
+                <Grid.Col span={12}>
+                  <Button onClick={(e) => Router.push('/signup')} variant="outline" color="gray" style={{ marginRight: "10px" }}>Não tenho conta</Button>
+                  <Button type="submit">Entrar</Button>
+                </Grid.Col>
+              </Grid>
             </Group>
           </form>
         </Paper >
