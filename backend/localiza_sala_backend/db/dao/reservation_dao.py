@@ -1,4 +1,5 @@
 from typing import List, Optional, Union
+from localiza_sala_backend.db.models.rooms_model import RoomsModel
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -52,19 +53,18 @@ class ReservationsDAO:
             await self.session.rollback()
             raise e
 
-    # async def get_all_rooms(self, limit: int = 25, offset: int = 0) -> List[RoomsModel]:
-    #     """
-    #     Retorna todas as salas.
+    async def get_all_reservations(self, limit: int = 25, offset: int = 0) -> List[ReservationsModel]:
+        """
+        Retorna todas as reservas.
 
-    #     :param limit: limite de salas a serem retornadas.
-    #     :param offset: offset de salas a serem retornadas.
-    #     :return: lista de salas.
-    #     """
-    #     raw_users = await self.session.execute(
-    #         select(RoomsModel).limit(limit).offset(offset),
-    #     )
-    #     return raw_users.scalars().fetchall()
-
+        :param limit: limite de reservas a serem retornadas.
+        :param offset: offset de reservas a serem retornadas.
+        :return: lista de reservas.
+        """
+        raw_reservations = await self.session.execute(
+            select(ReservationsModel).limit(limit).offset(offset),
+        )
+        return raw_reservations.scalars().fetchall()
     # async def get_room_by_id(self, id: int) -> Optional[RoomsModel]:
     #     """
     #     Retorna uma sala pelo id.
