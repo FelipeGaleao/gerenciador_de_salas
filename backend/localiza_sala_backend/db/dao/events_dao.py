@@ -38,14 +38,15 @@ class EventsDAO:
         """
         Cria um evento.
         """
+        event = EventsModel(nome=nome, descricao=descricao, quantidade_de_pessoas=quantidade_de_pessoas, nome_curso=nome_curso, nome_faculdade=nome_faculdade, dt_inicio_evento=dt_inicio_evento, dt_fim_evento=dt_fim_evento, hr_inicio_evento=hr_inicio_evento, hr_fim_evento=hr_fim_evento, criado_por=criado_por, dt_criacao=dt_criacao, dt_modificacao=dt_modificacao, atualizado_por=atualizado_por)
         try:
-            self.session.add(EventsModel(nome=nome, descricao=descricao, quantidade_de_pessoas=quantidade_de_pessoas, nome_curso=nome_curso, nome_faculdade=nome_faculdade, dt_inicio_evento=dt_inicio_evento, dt_fim_evento=dt_fim_evento, hr_inicio_evento=hr_inicio_evento, hr_fim_evento=hr_fim_evento, criado_por=criado_por, dt_criacao=dt_criacao, dt_modificacao=dt_modificacao, atualizado_por=atualizado_por))
+            self.session.add(event)
             await self.session.commit()
         except Exception as e:
             print(e)
             await self.session.rollback()
             raise e
-
+        return event
 
     async def get_all_events(self, limit: int = 25, offset: int = 0) -> List[EventsModel]:
         """

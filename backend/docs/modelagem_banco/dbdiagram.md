@@ -79,6 +79,8 @@ Table reservations {
   dt_fim datetime
   dt_criacao datetime
   dt_modificacao datetime
+  hr_inicio time
+  hr_fim time
   criado_por int [ref: > users.id]
   atualizado_por int [ref: > users.id]
   teacher_id int [ref: > teachers.id]

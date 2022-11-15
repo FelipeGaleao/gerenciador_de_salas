@@ -1,7 +1,9 @@
 from re import sub
 import os
 from typing import List, Union, Any
-from datetime import datetime
+from datetime import datetime, timedelta
+from localiza_sala_backend.db.dao.reservation_dao import ReservationsDAO
+from localiza_sala_backend.web.api.reservations.schema import ReservationModelInput
 from localiza_sala_backend.web.api.events.schema import EventsModelUpdate
 from localiza_sala_backend.web.api.events.schema import EventsModelView
 from localiza_sala_backend.db.dao.events_dao import EventsDAO
@@ -117,6 +119,7 @@ async def create_new_event(
     new_event: EventsModelInput,
     users_dao: UsersDAO = Depends(),
     events_dao: EventsDAO = Depends(),
+    reservation_dao: ReservationsDAO = Depends(),
     token: str = Depends(reuseable_oauth)
 ) -> None:
     """Método para criar um novo evento.
@@ -149,7 +152,22 @@ async def create_new_event(
     new_event.criado_por = user_detail.id
     
     try:
-        await events_dao.create_event(**new_event.dict())
+        event = await events_dao.create_event(**new_event.dict())
+        for i in range((new_event.dt_fim_evento - new_event.dt_inicio_evento).days + 1):
+           await reservation_dao.create_new_reservation(
+                dt_inicio=new_event.dt_inicio_evento + timedelta(days=i),
+                dt_fim=new_event.dt_inicio_evento + timedelta(days=i),
+                hr_inicio_evento=new_event.hr_inicio_evento,
+                hr_fim_evento=new_event.hr_fim_evento,
+                dt_criacao=datetime.now(),
+                dt_modificacao=datetime.now(),
+                criado_por=user_detail.id,
+                atualizado_por=user_detail.id,
+                event_id= event.id,
+                teacher_id=None,
+                room_id=None,
+                course_id=None,
+                user_id=user_detail.id)
     except Exception as e:
         print(e)
         return JSONResponse(status_code=400, content={"message": "Erro ao cadastrar um evento."})
