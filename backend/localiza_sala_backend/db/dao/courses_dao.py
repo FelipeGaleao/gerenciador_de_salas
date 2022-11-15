@@ -15,41 +15,21 @@ class CoursesDAO:
     def __init__(self, session: AsyncSession = Depends(get_db_session)):
         self.session = session
     
-    async def create_course(self, nome: str, teacher_id: int, lotacao_faculdade: str, curso: str, periodo: str, qtde_alunos_matriculados: int, criado_por: int, atualizado_por: int, dt_criacao: datetime, dt_atualizacao: datetime):
+    async def create_course(self, nome: str, teacher_id: int, lotacao_faculdade: str, curso: str, periodo: str, qtde_alunos_matriculados: int, criado_por: int, atualizado_por: int, dt_criacao: datetime, dt_atualizacao: datetime, dt_inicio_disciplina: datetime, dt_fim_disciplina: datetime, hr_inicio_disciplina: datetime, hr_fim_disciplina: datetime, room_id: int, segunda_aula: bool, terca_aula: bool, quarta_aula: bool, quinta_aula: bool, sexta_aula: bool, sabado_aula: bool, domingo_aula: bool) -> CoursesModel:
         """
         Cria uma disciplina.
 
         :param course: disciplina.
         """
+        course = CoursesModel(nome=nome, teacher_id=teacher_id, lotacao_faculdade=lotacao_faculdade, curso=curso, periodo=periodo, qtde_alunos_matriculados=qtde_alunos_matriculados, criado_por=criado_por, atualizado_por=atualizado_por, dt_criacao=dt_criacao, dt_atualizacao=dt_atualizacao, dt_inicio_disciplina=dt_inicio_disciplina, dt_fim_disciplina=dt_fim_disciplina, hr_inicio_disciplina=hr_inicio_disciplina, hr_fim_disciplina=hr_fim_disciplina, room_id = room_id, segunda_aula = segunda_aula, terca_aula = terca_aula, quarta_aula = quarta_aula, quinta_aula = quinta_aula, sexta_aula = sexta_aula, sabado_aula = sabado_aula, domingo_aula = domingo_aula)
         try:
-            self.session.add(CoursesModel(nome=nome, teacher_id=teacher_id, lotacao_faculdade=lotacao_faculdade, curso=curso, periodo=periodo, qtde_alunos_matriculados=qtde_alunos_matriculados, criado_por=criado_por, atualizado_por=atualizado_por, dt_criacao=dt_criacao, dt_atualizacao=dt_atualizacao))
+            self.session.add(course)
             await self.session.commit()
         except Exception as e:
             print(e)
             await self.session.rollback()
             raise e
-
-
-    # async def create_room(self, nome_sala: str, lotacao: int, observacao: str, agendavel: bool, dt_criacao: datetime, dt_atualizacao: datetime, criado_por: int) -> None:
-    #     """
-    #     Adiciona uma sala no banco de dados.
-
-    #     :param nome_sala: nome da sala.
-    #     :param lotacao: lotação da sala.
-    #     :param observacao: observação da sala.
-    #     :param agendavel: se a sala é agendável.
-    #     :param dt_criacao: data de criação da sala.
-    #     :param dt_atualizacao: data de atualização da sala.
-    #     :param criado_por: usuário que criou a sala.
-    #     :param atualizado_por: usuário que atualizou a sala.
-    #     """
-    #     try:
-    #         self.session.add(RoomsModel(nome_sala=nome_sala, lotacao=lotacao, observacao=observacao, agendavel=agendavel, dt_criacao=dt_criacao, dt_atualizacao=dt_atualizacao, criado_por=criado_por))
-    #         await self.session.commit()
-    #     except Exception as e:
-    #         print(e)
-    #         await self.session.rollback()
-    #         raise e
+        return course
 
     async def get_all_courses(self, limit: int = 25, offset: int = 0) -> List[CoursesModel]:
         """

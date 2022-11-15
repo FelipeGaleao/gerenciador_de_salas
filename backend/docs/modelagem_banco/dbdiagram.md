@@ -52,6 +52,13 @@ Table courses {
   lotacao_faculdade str
   dt_criacao datetime
   dt_modificacao datetime
+  segunda_aula bool
+  terca_aula bool
+  quarta_aula bool
+  quinta_aula bool
+  sexta_aula bool
+  sabado_aula bool
+  domingo_aula bool
   curso str
   periodo str
   qtde_alunos_matriculados int 
