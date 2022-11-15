@@ -1,5 +1,5 @@
 from sqlalchemy.sql.schema import Column
-from sqlalchemy.sql.sqltypes import DateTime, Integer, String, Boolean
+from sqlalchemy.sql.sqltypes import DateTime, Integer, String, Boolean, Time
 from sqlalchemy.orm import relationship
 from localiza_sala_backend.db.base import Base
 from sqlalchemy import ForeignKey
