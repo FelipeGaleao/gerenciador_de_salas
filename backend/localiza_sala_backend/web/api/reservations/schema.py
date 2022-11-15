@@ -1,3 +1,9 @@
+from localiza_sala_backend.web.api.courses.schema import CoursesModelView
+from localiza_sala_backend.web.api.teachers.schema import TeacherModelView
+from localiza_sala_backend.web.api.events.schema import EventsModelView
+from localiza_sala_backend.web.api.users.schema import UsersModelDTO
+from localiza_sala_backend.web.api.rooms.schema import RoomModelView
+
 from pydantic import BaseModel, Field
 from datetime import datetime, time, timedelta
 from typing import Union, List
@@ -38,22 +44,12 @@ class ReservationModelView(BaseModel):
     event_id: Union[int, None] = Field(None, example=1)
     course_id: Union[int, None] = Field(None, example=1)
     user_id: Union[int, None] = Field(None, example=1)
-    event: Union[EventsModelView, None] = Field(None, example= EventsModelView(
-        id=1,
-        nome="Estrutura de Dados I",
-        descricao="Aula de Estrutura de Dados I",
-        quantidade_de_pessoas=10,
-        nome_curso="Ciencia da Computacao",
-        nome_faculdade="Faculdade de Computacao",
-        dt_inicio_evento=datetime.now(),
-        dt_fim_evento=datetime.now(),
-        hr_inicio_evento=time(hour=8, minute=0),
-        hr_fim_evento=time(hour=10, minute=0),
-        criado_por=1,
-        atualizado_por=1,
-        dt_criacao=datetime.now(),
-        dt_modificacao=datetime.now()
-    ))
+    event: Union[EventsModelView, None] = Field(None, example= None)
+    course: Union[CoursesModelView, None] = Field(None, example= None)
+    teacher: Union[TeacherModelView, None] = Field(None, example= None)
+    room: Union[RoomModelView, None] = Field(None, example= None)
+    user: Union[UsersModelDTO, None] = Field(None, example= None)
+
     class Config:
         orm_mode = True
     

@@ -61,10 +61,10 @@ class ReservationsDAO:
         :param offset: offset de reservas a serem retornadas.
         :return: lista de reservas.
         """
-        statement = select(ReservationsModel, RoomsModel).join(RoomsModel, ReservationsModel.room_id == RoomsModel.id).limit(limit).offset(offset)
-        raw_reservations = await self.session.execute(statement)
-        return raw_reservations.all()
-
+        raw_reservations = await self.session.execute(
+            select(ReservationsModel).limit(limit).offset(offset),
+        )
+        return raw_reservations.scalars().fetchall()
     # async def get_room_by_id(self, id: int) -> Optional[RoomsModel]:
     #     """
     #     Retorna uma sala pelo id.

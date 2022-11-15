@@ -21,3 +21,4 @@ class UsersModel(Base):
     criado_por = Column(Integer())  # noqa: WPS432
     atualizado_por = Column(Integer())  # noqa: WPS432
     token_senha = Column(String(length=2000))  # noqa: WPS432
+    
