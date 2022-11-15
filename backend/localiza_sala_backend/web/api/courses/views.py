@@ -1,7 +1,8 @@
 from re import sub
 import os
 from typing import List, Union, Any
-from datetime import datetime
+from datetime import datetime, timedelta
+from localiza_sala_backend.db.dao.reservation_dao import ReservationsDAO
 from localiza_sala_backend.web.api.courses.schema import CoursesModelUpdate
 from localiza_sala_backend.web.api.courses.schema import CoursesModelView
 from localiza_sala_backend.web.api.rooms.schema import RoomsModelUpdate
@@ -122,6 +123,7 @@ async def create_new_course(
     new_course: CoursesModelsDTO,
     users_dao: UsersDAO = Depends(),
     courses_dao: CoursesDAO = Depends(),
+    reservation_dao: ReservationsDAO = Depends(),
     token: str = Depends(reuseable_oauth)
 ) -> None:
     """Método para criar uma nova disciplina.
@@ -154,7 +156,121 @@ async def create_new_course(
     new_course.criado_por = user_detail.id
     
     try:
-        await courses_dao.create_course(**new_course.dict())
+        course = await courses_dao.create_course(**new_course.dict())
+        for i in range((new_course.dt_fim_disciplina - new_course.dt_inicio_disciplina).days + 1):
+            dt = new_course.dt_inicio_disciplina + timedelta(days=i)
+            if dt.weekday() == 0 and new_course.segunda_aula == True:
+                await reservation_dao.create_new_reservation(
+                                dt_inicio= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                dt_fim= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                hr_inicio_evento=new_course.hr_inicio_disciplina,
+                                hr_fim_evento=new_course.hr_fim_disciplina,
+                                dt_criacao=datetime.now(),
+                                dt_modificacao=datetime.now(),
+                                criado_por=user_detail.id,
+                                atualizado_por=user_detail.id,
+                                event_id= None,
+                                teacher_id= new_course.teacher_id,
+                                room_id= new_course.room_id,
+                                course_id= course.id,
+                                user_id=user_detail.id)  
+
+            if dt.weekday() == 1 and new_course.terca_aula == True:
+                await reservation_dao.create_new_reservation(
+                                dt_inicio= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                dt_fim= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                hr_inicio_evento=new_course.hr_inicio_disciplina,
+                                hr_fim_evento=new_course.hr_fim_disciplina,
+                                dt_criacao=datetime.now(),
+                                dt_modificacao=datetime.now(),
+                                criado_por=user_detail.id,
+                                atualizado_por=user_detail.id,
+                                event_id= None,
+                                teacher_id= new_course.teacher_id,
+                                room_id= new_course.room_id,
+                                course_id= course.id,
+                                user_id=user_detail.id)
+
+            if dt.weekday() == 2 and new_course.quarta_aula == True:
+                await reservation_dao.create_new_reservation(
+                                dt_inicio= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                dt_fim= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                hr_inicio_evento=new_course.hr_inicio_disciplina,
+                                hr_fim_evento=new_course.hr_fim_disciplina,
+                                dt_criacao=datetime.now(),
+                                dt_modificacao=datetime.now(),
+                                criado_por=user_detail.id,
+                                atualizado_por=user_detail.id,
+                                event_id= None,
+                                teacher_id= new_course.teacher_id,
+                                room_id= new_course.room_id,
+                                course_id= course.id,
+                                user_id=user_detail.id)
+
+            if dt.weekday() == 3 and new_course.quinta_aula == True:
+                await reservation_dao.create_new_reservation(
+                                dt_inicio= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                dt_fim= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                hr_inicio_evento=new_course.hr_inicio_disciplina,
+                                hr_fim_evento=new_course.hr_fim_disciplina,
+                                dt_criacao=datetime.now(),
+                                dt_modificacao=datetime.now(),
+                                criado_por=user_detail.id,
+                                atualizado_por=user_detail.id,
+                                event_id= None,
+                                teacher_id= new_course.teacher_id,
+                                room_id= new_course.room_id,
+                                course_id= course.id,
+                                user_id=user_detail.id)
+
+            if dt.weekday() == 4 and new_course.sexta_aula == True:
+                await reservation_dao.create_new_reservation(
+                                dt_inicio= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                dt_fim= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                hr_inicio_evento=new_course.hr_inicio_disciplina,
+                                hr_fim_evento=new_course.hr_fim_disciplina,
+                                dt_criacao=datetime.now(),
+                                dt_modificacao=datetime.now(),
+                                criado_por=user_detail.id,
+                                atualizado_por=user_detail.id,
+                                event_id= None,
+                                teacher_id= new_course.teacher_id,
+                                room_id= new_course.room_id,
+                                course_id= course.id,
+                                user_id=user_detail.id)
+
+            if dt.weekday() == 5 and new_course.sabado_aula == True:
+                await reservation_dao.create_new_reservation(
+                                dt_inicio= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                dt_fim= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                hr_inicio_evento=new_course.hr_inicio_disciplina,
+                                hr_fim_evento=new_course.hr_fim_disciplina,
+                                dt_criacao=datetime.now(),
+                                dt_modificacao=datetime.now(),
+                                criado_por=user_detail.id,
+                                atualizado_por=user_detail.id,
+                                event_id= None,
+                                teacher_id= new_course.teacher_id,
+                                room_id= new_course.room_id,
+                                course_id= course.id,
+                                user_id=user_detail.id)
+
+            if dt.weekday() == 6 and new_course.domingo_aula == True:
+                await reservation_dao.create_new_reservation(
+                                dt_inicio= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                dt_fim= new_course.dt_inicio_disciplina + timedelta(days=i),
+                                hr_inicio_evento=new_course.hr_inicio_disciplina,
+                                hr_fim_evento=new_course.hr_fim_disciplina,
+                                dt_criacao=datetime.now(),
+                                dt_modificacao=datetime.now(),
+                                criado_por=user_detail.id,
+                                atualizado_por=user_detail.id,
+                                event_id= None,
+                                teacher_id= new_course.teacher_id,
+                                room_id= new_course.room_id,
+                                course_id= course.id,
+                                user_id=user_detail.id)
+
     except Exception as e:
         print(e)
         return JSONResponse(status_code=400, content={"message": "Erro ao cadastrar uma disciplina."})
