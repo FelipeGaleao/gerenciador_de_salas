@@ -45,6 +45,10 @@ Table teachers {
 Table courses {
   id int
   nome str
+  dt_inicio_disciplina datetime
+  dt_fim_disciplina datetime
+  hr_inicio_disciplina time
+  hr_fim_disciplina time
   lotacao_faculdade str
   dt_criacao datetime
   dt_modificacao datetime

@@ -21,52 +21,8 @@ export default function SignupPage() {
 
   const user_logado = useSelector((state) => state.user);
 
-const checkUserLogado = () => {
-  if(user_logado.access_token != null){
-    showNotification({
-      title: 'Você já está logado!',
-      message: 'Agora você pode agendar salas! :)',
-      color: 'teal',
-      position: 'br',
-    });
-
-    Router.push('/');
-  }
-} 
-
-React.useEffect(() => {
-  checkUserLogado()
-}, []);
-
-
-const users = useSelector((state) => state.users);
-
-
-const form = useForm({
-  validate: yupResolver(schema),
-  initialValues: {
-    name: '',
-    email: '',
-    age: 18,
-  },
-});
-
-const handleSubmit = async (values) => {
-  let data;
-  setVisible((v) => !v);
-  
-  const formData = new FormData();
-  formData.append('username', values.email);
-  formData.append('password', values.senha);
-
-
-  try{
-    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/users/login', {
-      method: 'POST',
-      body: formData
-    });
-    data = await response.json();
-    if(response.status == 200){
+  const checkUserLogado = () => {
+    if (user_logado.access_token != null) {
       showNotification({
         title: 'Você já está logado!',
         message: 'Agora você pode agendar salas! :)',
@@ -105,7 +61,7 @@ const handleSubmit = async (values) => {
 
 
     try {
-      const response = await fetch('http://localhost:8000/api/users/login', {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/users/login', {
         method: 'POST',
         body: formData
       });
