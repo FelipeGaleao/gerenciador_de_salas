@@ -2,6 +2,7 @@ from re import sub
 import os
 from typing import List, Union, Any
 from datetime import datetime
+from localiza_sala_backend.web.api.reservations.schema import ReservationModelView
 from localiza_sala_backend.db.dao.reservation_dao import ReservationsDAO
 from localiza_sala_backend.web.api.reservations.schema import ReservationModelInput
 from fastapi import APIRouter, status
@@ -94,24 +95,23 @@ router = APIRouter()
    
 #     return JSONResponse(status_code=200, content={"message": "Disciplina atualizada com sucesso!"})
 
-# @router.get('/', response_model=List[CoursesModelView])
+@router.get('/', response_model=List[ReservationModelView])
+async def get_all_reservation(
+    limit: int = 25,
+    offset: int = 0,
+    reservation_dao: ReservationsDAO = Depends(),
+) -> List[ReservationModelView]:
+    """Método para retornar todos os reservas cadastrados no banco de dados.
 
-# async def get_all_courses(
-#     limit: int = 25,
-#     offset: int = 0,
-#     courses_dao: CoursesDAO = Depends(),
-# ) -> List[CoursesModelView]:
-#     """Método para retornar todos os disciplinas cadastrados no banco de dados.
+    Args: \n
+        limit (int, optional): Limite de reservas a serem retornados. Defaults to 25. \n
+        offset (int, optional): Deslocamento de reservas a serem retornados. Defaults to 0. \n
+        courses_dao (CoursesDAO, optional): Camada de acesso a dados de reservas. \n
 
-#     Args: \n
-#         limit (int, optional): Limite de disciplinas a serem retornados. Defaults to 25. \n
-#         offset (int, optional): Deslocamento de disciplinas a serem retornados. Defaults to 0. \n
-#         courses_dao (CoursesDAO, optional): Camada de acesso a dados de disciplinas. \n
-
-#     Returns: \n
-#         List[CoursesModelView]: _description_ \n
-#     """
-#     return await courses_dao.get_all_courses(limit=limit, offset=offset)
+    Returns: \n
+        List[ReservationModelView]: _description_ \n
+    """
+    return await reservation_dao.get_all_reservations(limit=limit, offset=offset)
 
 
 @router.post("/", status_code=200)

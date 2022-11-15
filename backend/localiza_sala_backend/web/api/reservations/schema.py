@@ -1,7 +1,27 @@
 from pydantic import BaseModel, Field
 from datetime import datetime, time, timedelta
-from typing import Union
+from typing import Union, List
 
+
+class EventsModelView(BaseModel):
+    """Model para Eventos. """
+    id: Union[None, int] = Field(None, example=1)
+    nome: str = Field(..., example="Estrutura de Dados I")
+    descricao: Union[str, None] = Field(None, example="Aula de Estrutura de Dados I")
+    quantidade_de_pessoas: int = Field(..., example=10)
+    nome_curso: str = Field(..., example="Ciencia da Computacao")
+    nome_faculdade: str = Field(..., example="Faculdade de Computacao")
+    dt_inicio_evento: datetime = Field(..., example=datetime.now())
+    dt_fim_evento: datetime = Field(..., example=datetime.now())
+    hr_inicio_evento: time = Field(..., example=time(hour=8, minute=0))
+    hr_fim_evento: time = Field(..., example=time(hour=10, minute=0))
+    criado_por: int = Field(None, example=1)
+    atualizado_por: Union[int, None] = Field(None, example=1)
+    dt_criacao: Union[datetime, None] = Field(None, example=datetime.now())
+    dt_modificacao: Union[datetime, None] = Field(None, example=datetime.now())
+    
+    class Config:
+        orm_mode = True
 
 class ReservationModelView(BaseModel):
     id: Union[int, None] = Field(None, example=1)
@@ -14,14 +34,29 @@ class ReservationModelView(BaseModel):
     criado_por: Union[int, None] = Field(None, example=1)
     atualizado_por: Union[int, None] = Field(None, example=1)
     teacher_id: Union[int, None] = Field(None, example=1)
-    room_id: Union[int, None] = Field(None, example=1)
+    room_id: Union[int, List, None] = Field(None, example=1)
     event_id: Union[int, None] = Field(None, example=1)
     course_id: Union[int, None] = Field(None, example=1)
     user_id: Union[int, None] = Field(None, example=1)
-
+    event: Union[EventsModelView, None] = Field(None, example= EventsModelView(
+        id=1,
+        nome="Estrutura de Dados I",
+        descricao="Aula de Estrutura de Dados I",
+        quantidade_de_pessoas=10,
+        nome_curso="Ciencia da Computacao",
+        nome_faculdade="Faculdade de Computacao",
+        dt_inicio_evento=datetime.now(),
+        dt_fim_evento=datetime.now(),
+        hr_inicio_evento=time(hour=8, minute=0),
+        hr_fim_evento=time(hour=10, minute=0),
+        criado_por=1,
+        atualizado_por=1,
+        dt_criacao=datetime.now(),
+        dt_modificacao=datetime.now()
+    ))
     class Config:
         orm_mode = True
-
+    
  
 class ReservationModelInput(BaseModel):
     dt_inicio: datetime = Field(..., example="2021-01-01 00:00:00")

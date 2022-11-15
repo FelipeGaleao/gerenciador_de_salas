@@ -25,3 +25,9 @@ class ReservationsModel(Base):
     course_id = Column(Integer(), ForeignKey("courses.id"))
     user_id = Column(Integer(), ForeignKey("users.id"))
 
+    relationship("UsersModel", back_populates="reservations")
+    relationship("EventsModel", back_populates="reservations")
+    relationship("CoursesModel", back_populates="reservations")
+    relationship("RoomsModel", back_populates="reservations")
+    relationship("TeachersModel", back_populates="reservations")
+    
