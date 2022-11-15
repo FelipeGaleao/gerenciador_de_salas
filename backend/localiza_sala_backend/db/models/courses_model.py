@@ -1,8 +1,7 @@
 from sqlalchemy.sql.schema import Column
-from sqlalchemy.sql.sqltypes import DateTime, Integer, String
+from sqlalchemy.sql.sqltypes import DateTime, Integer, String, Time
 from localiza_sala_backend.db.base import Base
 from sqlalchemy import ForeignKey
-
 
 class CoursesModel(Base):
     """Model para Disciplinas (courses)."""
@@ -16,6 +15,10 @@ class CoursesModel(Base):
     curso = Column(String(length=200))  # noqa: WPS432
     periodo = Column(String(length=200))  # noqa: WPS432
     qtde_alunos_matriculados = Column(Integer())
+    dt_inicio_disciplina = Column(DateTime())  # noqa: WPS432
+    dt_fim_disciplina = Column(DateTime())  # noqa: WPS432
+    hr_inicio_disciplina = Column(Time())  # noqa: WPS432
+    hr_fim_disciplina = Column(Time())  # noqa: WPS432
     dt_criacao = Column(DateTime())  # noqa: WPS432
     dt_atualizacao = Column(DateTime())  # noqa: WPS432
     criado_por = Column(Integer(), ForeignKey("users.id"))
