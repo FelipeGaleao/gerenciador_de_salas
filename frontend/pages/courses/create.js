@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { useForm, yupResolver } from '@mantine/form';
 import { NumberInput, Textarea, TextInput, Button, Box, Group, Paper, Title, Text, LoadingOverlay, Notification, Checkbox, Container, Select } from '@mantine/core';
+import { DatePicker, TimeRangeInput } from '@mantine/dates';
 import { Grid } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
@@ -8,11 +9,16 @@ import Router from 'next/router';
 import { useSelector, useDispatch } from "react-redux";
 import React from 'react';
 import App from 'next/app';
+import dayjs from 'dayjs';
+
 
 export default function RoomsIndexPage() {
     const user_logado = useSelector((state) => state.user);
     const [teachers, setTeacher] = useState([]);
     const [visible, setVisible] = useState(false);
+    const now = new Date();
+    const then = dayjs(now).add(30, 'minutes').toDate();
+    const [hrEvento, setHrEvento] = useState([now, then]);
 
     const schema = Yup.object().shape({
         nome: Yup.string().min(2, 'O nome da disciplina deve ter no mínimo 2 caracteres').max(50, 'O nome da disciplina deve ter no máximo 50 caracteres').required('O nome da disciplina é obrigatório'),
@@ -51,7 +57,18 @@ export default function RoomsIndexPage() {
             'curso': values.curso,
             'periodo': values.periodo,
             'qtde_alunos_matriculados': values.qtde_alunos_matriculados,
+            'dt_inicio_disciplina': values.dt_inicio_disciplina,
+            'dt_fim_disciplina': values.dt_fim_disciplina,
+            'hr_inicio_disciplina': (hrEvento[0].getHours()<10?'0':'') + hrEvento[0].getHours() + ':' + (hrEvento[0].getMinutes()<10?'0':'') + hrEvento[0].getMinutes(),
+            'hr_fim_disciplina': (hrEvento[1].getHours()<10?'0':'') + hrEvento[1].getHours() + ':' + (hrEvento[1].getMinutes()<10?'0':'') + hrEvento[1].getMinutes(),
             'teacher_id': values.teacher_id,
+            'segunda_aula': values.segunda_aula,
+            'terca_aula': values.terca_aula,
+            'quarta_aula': values.quarta_aula,
+            'quinta_aula': values.quinta_aula,
+            'sexta_aula': values.sexta_aula,
+            'sabado_aula': values.sabado_aula,
+            'domingo_aula': values.domingo_aula,
         };
 
         const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API_URL + '/api/courses', {
@@ -80,7 +97,7 @@ export default function RoomsIndexPage() {
             });
             Router.push('/courses');
         }
-        
+
     }
 
     const getTeachersSelect = () => {
@@ -94,6 +111,21 @@ export default function RoomsIndexPage() {
     useEffect(() => {
         getTeachers();
     }, []);
+
+
+    //     "qtde_alunos_matriculados": 10,
+    //   "dt_inicio_disciplina": "2022-11-15T21:07:15.564888",
+    //   "dt_fim_disciplina": "2022-11-15T21:07:15.564905",
+    //   "hr_inicio_disciplina": "08:00:00",
+    //   "hr_fim_disciplina": "09:00:00",
+    //  "segunda_aula": true,
+    //   "terca_aula": true,
+    //   "quarta_aula": true,
+    //   "quinta_aula": true,
+    //   "sexta_aula": true,
+    //   "sabado_aula": true,
+    //   "domingo_aula": true,
+
 
     return (
         <Container size="xl">
@@ -121,14 +153,14 @@ export default function RoomsIndexPage() {
                                         {...form.getInputProps('nome')}
                                     />
                                     </Grid.Col>
-                                    <Grid.Col md={6} sm={12}> <TextInput
+                                    <Grid.Col md={4} sm={12}> <TextInput
                                         withAsterisk
                                         label="Faculdade"
                                         placeholder="Ex.:  FACOM/UFMS"
                                         {...form.getInputProps('lotacao_faculdade')}
                                     />
                                     </Grid.Col>
-                                    <Grid.Col md={6} sm={12}><Select
+                                    <Grid.Col md={4} sm={12}><Select
                                         label="Professor"
                                         placeholder="Selecione o professor"
                                         {...form.getInputProps('teacher_id')}
@@ -146,7 +178,7 @@ export default function RoomsIndexPage() {
                                             { label: '2022.1', value: '2022.1' },
                                         ]}
                                     />
-                                    </Grid.Col> 
+                                    </Grid.Col>
                                     <Grid.Col md={6} sm={12}><Select
                                         label="Selecione o curso"
                                         placeholder="Selecione o curso"
@@ -166,12 +198,32 @@ export default function RoomsIndexPage() {
                                                 { label: 'Engenharia de Produção', value: 'Engenharia de Produção' },
                                                 { label: 'Engenharia Química', value: 'Engenharia Química' },
                                                 { label: 'Engenharia de Alimentos', value: 'Engenharia de Alimentos' },
-                                            
+
                                             ]
                                         }
                                     />
                                     </Grid.Col>
-                                    <Grid.Col md={6} sm={12}> <TextInput
+                                    <Grid.Col md={3} sm={12}><DatePicker
+                                        label="Data de início"
+                                        placeholder="Selecione a data de início"
+                                        {...form.getInputProps('dt_inicio_disciplina')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={3} sm={12}><DatePicker
+                                        label="Data de término"
+                                        placeholder="Selecione a data de término"
+                                        {...form.getInputProps('dt_fim_disciplina')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={3} sm={12}>
+                                        <TimeRangeInput label="Horário do evento (Inicio e Fim)" value={hrEvento} onChange={setHrEvento} clearable />
+                                    </Grid.Col>
+
+                                    <hr />
+                                    <Grid.Col md={12} sm={12} style={{marginBottom: "20px"}}>
+                                        <h3>Selecione os dias de aula</h3>
+                                    </Grid.Col>
+                                    <Grid.Col md={3} sm={12} style={{marginTop: "40px"}}> <TextInput
                                         withAsterisk
                                         type={"number"}
                                         label="Qtde. de alunos matriculados"
@@ -179,8 +231,41 @@ export default function RoomsIndexPage() {
                                         {...form.getInputProps('qtde_alunos_matriculados')}
                                     />
                                     </Grid.Col>
-
-
+                                    <Grid.Col md={1} sm={12}><Checkbox
+                                        label="Segunda"
+                                        {...form.getInputProps('segunda_aula')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={1} sm={12}><Checkbox
+                                        label="Terça"
+                                        {...form.getInputProps('terca_aula')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={1} sm={12}><Checkbox
+                                        label="Quarta"
+                                        {...form.getInputProps('quarta_aula')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={1} sm={12}><Checkbox
+                                        label="Quinta"
+                                        {...form.getInputProps('quinta_aula')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={1} sm={12}><Checkbox
+                                        label="Sexta"
+                                        {...form.getInputProps('sexta_aula')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={1} sm={12}><Checkbox
+                                        label="Sábado"
+                                        {...form.getInputProps('sabado_aula')}
+                                    />
+                                    </Grid.Col>
+                                    <Grid.Col md={1} sm={12}><Checkbox
+                                        label="Domingo"
+                                        {...form.getInputProps('domingo_aula')}
+                                    />
+                                    </Grid.Col>
                                 </Grid>
 
                                 <Group position="right" mt="xl">
