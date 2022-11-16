@@ -20,7 +20,7 @@ export default function RoomsIndexPage() {
     const now = new Date();
     const then = dayjs(now).add(30, 'minutes').toDate();
     const [hrEvento, setHrEvento] = useState([now, then]);
-  
+
 
     const schema = Yup.object().shape({
         nome: Yup.string().required('Nome é obrigatório'),
@@ -46,8 +46,8 @@ export default function RoomsIndexPage() {
             'nome_curso': values.nome_curso,
             'nome_faculdade': values.nome_faculdade,
             'quantidade_de_pessoas': values.quantidade_de_pessoas,
-            'hr_inicio_evento': (hrEvento[0].getHours()<10?'0':'') + hrEvento[0].getHours() + ':' + (hrEvento[0].getMinutes()<10?'0':'') + hrEvento[0].getMinutes(),
-            'hr_fim_evento': (hrEvento[1].getHours()<10?'0':'') + hrEvento[1].getHours() + ':' + (hrEvento[1].getMinutes()<10?'0':'') + hrEvento[1].getMinutes(),
+            'hr_inicio_evento': (hrEvento[0].getHours() < 10 ? '0' : '') + hrEvento[0].getHours() + ':' + (hrEvento[0].getMinutes() < 10 ? '0' : '') + hrEvento[0].getMinutes(),
+            'hr_fim_evento': (hrEvento[1].getHours() < 10 ? '0' : '') + hrEvento[1].getHours() + ':' + (hrEvento[1].getMinutes() < 10 ? '0' : '') + hrEvento[1].getMinutes(),
             'dt_inicio_evento': values.dt_inicio_evento,
             'dt_fim_evento': values.dt_fim_evento,
         };
@@ -177,8 +177,8 @@ export default function RoomsIndexPage() {
                                         {...form.getInputProps('dt_fim_evento')}
                                     />
                                     </Grid.Col>
-                                    <Grid.Col md={3} sm={12}> 
-                                    <TimeRangeInput label="Horário do evento (Inicio e Fim)" value={hrEvento} onChange={setHrEvento} clearable />
+                                    <Grid.Col md={3} sm={12}>
+                                        <TimeRangeInput label="Horário do evento (Inicio e Fim)" value={hrEvento} onChange={setHrEvento} clearable />
                                     </Grid.Col>
 
                                 </Grid>
