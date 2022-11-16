@@ -29,6 +29,7 @@ services:
         condition: service_healthy
     environment:
       LOCALIZA_SALA_BACKEND_HOST: 0.0.0.0
+      LOCALIZA_SALA_BACKEND_PORT: 8000
       LOCALIZA_SALA_BACKEND_DB_HOST: localiza_sala_backend-db
       LOCALIZA_SALA_BACKEND_DB_PORT: 3306
       LOCALIZA_SALA_BACKEND_DB_USER: root

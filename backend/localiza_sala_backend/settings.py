@@ -4,6 +4,7 @@ from tempfile import gettempdir
 
 from pydantic import BaseSettings
 from yarl import URL
+import os
 
 TEMP_DIR = Path(gettempdir())
 
@@ -28,7 +29,7 @@ class Settings(BaseSettings):
     """
 
     host: str = "127.0.0.1"
-    port: int = 80
+    port: int = os.getenv("LOCALIZA_SALA_BACKEND_PORT", 8000)
     # quantity of workers for uvicorn
     workers_count: int = 3
     # Enable uvicorn reloading
@@ -40,11 +41,11 @@ class Settings(BaseSettings):
     log_level: LogLevel = LogLevel.INFO
 
     # Variables for the database
-    db_host: str = "localhost"
-    db_port: int = 3306
-    db_user: str = "localiza_sala_backend"
-    db_pass: str = "localiza_sala_backend"
-    db_base: str = "localiza_sala_backend"
+    db_host: str = os.getenv("LOCALIZA_SALA_BACKEND_DB_HOST", "localhost")
+    db_port: int = os.getenv("LOCALIZA_SALA_BACKEND_DB_PORT", "3306")
+    db_user: str = os.getenv("LOCALIZA_SALA_BACKEND_DB_USER", "localiza_sala_backend")
+    db_pass: str = os.getenv("LOCALIZA_SALA_BACKEND_DB_PASS", "localiza_sala_backend")
+    db_base: str = os.getenv("LOCALIZA_SALA_BACKEND_DB_BASE", "localiza_sala")
     db_echo: bool = False
 
     @property
