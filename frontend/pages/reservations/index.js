@@ -1,10 +1,23 @@
 import { Grid, Paper, Card, Menu, Image, ActionIcon, Indicator, Text, Badge, Button, Group, MultiSelect } from '@mantine/core';
 import { IconDots, IconEye, IconFileZip, IconTrash } from '@tabler/icons';
 import { Calendar } from '@mantine/dates';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ReservationPage() {
   const [value, setValue] = useState(null);
+  const [reservations, setReservations] = useState([]);
+
+  const getReservations = async () => {
+    const res = await fetch('http://localhost:8000/api/reservation');
+    const data = await res.json();
+    console.log(data);
+    setReservations(data);
+  };
+
+
+  useEffect(() => {
+    getReservations();
+  }, []);
 
   return (
     <Grid>
