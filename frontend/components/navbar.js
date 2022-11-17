@@ -179,6 +179,7 @@ export function Navbar() {
       { title: 'Professores', href: '/teachers' },
       { title: 'Disciplinas', href: '/courses' },
       { title: 'Eventos', href: '/events' },
+      { title: 'Reservas', href: '/reservations' },
     ],
   };
 
